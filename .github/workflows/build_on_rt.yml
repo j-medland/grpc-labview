@@ -144,7 +144,7 @@ jobs:
         
     - name: Tar Build Artifacts
       run: >-
-        tar -czvf liblabview-grpc-server-rt.tar.gz -C ${GITHUB_WORKSPACE}/build liblabview_grpc_server.so
+        find tar ${GITHUB_WORKSPACE}/build -name "labview_grpc_server*.so" | -czvf liblabview-grpc-server-rt.tar.gz -T -
     
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v2

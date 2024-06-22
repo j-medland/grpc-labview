@@ -19,6 +19,7 @@ To prepare for cmake + Microsoft Visual C++ compiler build
 - Install [Git](https://git-scm.com/).
 - Install [CMake](https://cmake.org/download/).
 - Install [Python 3.7 or Higher](https://www.python.org/downloads/).
+- Install [nasm](https://www.nasm.us/) and add it to `PATH`
 
 
 #### Building 64-bit

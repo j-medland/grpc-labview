@@ -62,8 +62,8 @@ jobs:
     - name: Tar Build Artifacts
       run: >-
         tar -czvf labview-grpc-server-windows-x86.tar.gz -C ${{runner.workspace}}\grpc-labview\build\Release
-        labview_grpc_server.dll
-        labview_grpc_generator.dll
+        labview_grpc_server32.dll
+        labview_grpc_generator32.dll
     
     - name: Upload Build Artifacts
       uses: actions/upload-artifact@v2
