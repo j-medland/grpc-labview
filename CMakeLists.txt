@@ -2,11 +2,15 @@
 # ----------------------------------------------------------------------
 cmake_minimum_required(VERSION 3.5.1)
 
-cmake_policy(SET CMP0091 NEW)
+if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.15") 
+  cmake_policy(SET CMP0091 NEW)
+endif()
 
 project(labview-grpc C CXX)
 
-math(EXPR BITNESS "8*${CMAKE_SIZEOF_VOID_P}")
+math(EXPR _BITNESS "8*${CMAKE_SIZEOF_VOID_P}")
+
+message(STATUS Building for ${_BITNESS}...)
 
 set(CMAKE_CXX_STANDARD 14)
 set(C_VISIBILITY_PRESET hidden)
@@ -15,7 +19,7 @@ set(VISIBILITY_INLINES_HIDDEN ON)
 set(WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 
 if(MSVC)
-  add_definitions(-D_WIN32_WINNT=0x600)
+  add_definitions(-D_WIN32_WINNT=0x600 -D_PS_${CMAKE_SIZEOF_VOID_P}))
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   add_compile_options("$<$<NOT:$<CONFIG:Debug>>:/Zi>")
   add_link_options("$<$<NOT:$<CONFIG:Debug>>:/DEBUG>")
@@ -24,14 +28,6 @@ if(MSVC)
 endif()
 
 find_package(Threads REQUIRED)
-
-# ----------------------------------------------------------------------
-# ----------------------------------------------------------------------
-message(${CMAKE_SIZEOF_VOID_P})
-
-# ----------------------------------------------------------------------
-# ----------------------------------------------------------------------
-add_definitions(-D_PS_${CMAKE_SIZEOF_VOID_P})
 
 # ----------------------------------------------------------------------
 # Include the gRPC's cmake build
@@ -94,9 +90,10 @@ add_library(labview_grpc_server SHARED
 target_link_libraries(labview_grpc_server
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
-  ${_PROTOBUF_LIBPROTOBUF})
+  ${_PROTOBUF_LIBPROTOBUF}
+  whereami)
 
-set_target_properties(labview_grpc_server PROPERTIES OUTPUT_NAME labview_grpc_server${BITNESS})
+set_target_properties(labview_grpc_server PROPERTIES OUTPUT_NAME labview_grpc_server${_BITNESS})
 
 # ----------------------------------------------------------------------
 # LabVIEW code generator support library to generate client and
@@ -112,7 +109,14 @@ target_link_libraries(labview_grpc_generator
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
-set_target_properties(labview_grpc_generator PROPERTIES OUTPUT_NAME labview_grpc_generator${BITNESS})
+set_target_properties(labview_grpc_generator PROPERTIES OUTPUT_NAME labview_grpc_generator${_BITNESS})
+
+# ----------------------------------------------------------------------
+# Source only third_party code to enable the .dll/.so to load
+# adjacent configuration files
+# ----------------------------------------------------------------------
+add_library(whereami INTERFACE third_party/whereami/src/whereami.c)
+target_include_directories(whereami INTERFACE third_party/whereami/src)
 
 
 # ######################################################################
