@@ -235,6 +235,6 @@ namespace grpc_labview
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     void OccurServerEvent(LVUserEventRef event, gRPCid* data);
-    void OccurServerEvent(LVUserEventRef event, gRPCid* data, std::string eventMethodName);
+    void OccurServerEvent(LVUserEventRef event, gRPCid* data, const std::string &eventMethodName);
     std::string read_keycert(const std::string &filename);
 }

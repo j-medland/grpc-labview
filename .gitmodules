@@ -1,6 +1,0 @@
-[submodule "third_party/grpc"]
-	path = third_party/grpc
-	url = https://github.com/grpc/grpc.git
-[submodule "third_party/whereami"]
-	path = third_party/whereami
-	url = https://github.com/gpakosz/whereami.git

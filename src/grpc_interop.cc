@@ -23,18 +23,17 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    void OccurServerEvent(LVUserEventRef event, gRPCid* data, std::string eventMethodName)
+    void OccurServerEvent(LVUserEventRef event, gRPCid* data, const std::string &eventMethodName)
     {
-        LStr* lvMethodName = (LStr*)malloc(sizeof(int32_t) + eventMethodName.length() + 1);
-        lvMethodName->cnt = eventMethodName.length();
-        memcpy(lvMethodName->str, eventMethodName.c_str(), eventMethodName.length());
-
         GeneralMethodEventData eventData;
         eventData.methodData = data;
-        eventData.methodName = &lvMethodName;
+        eventData.methodName = nullptr;
+        
+        SetLVString(&eventData.methodName, eventMethodName);
+
         auto error = PostUserEvent(event, &eventData);
 
-        free(lvMethodName);
+        DSDisposeHandle(eventData.methodName);
     }
 
     //---------------------------------------------------------------------
@@ -468,7 +467,7 @@ LIBRARY_EXPORT int32_t IsCancelled(grpc_labview::gRPCid** id)
 //---------------------------------------------------------------------
 // Allows for definition of the LVRT DLL path to be used for callback functions
 // This function should be called prior to any other gRPC functions in this library
-   //---------------------------------------------------------------------
+//---------------------------------------------------------------------
 LIBRARY_EXPORT int32_t SetLVRTModulePath(const char* modulePath)
 {
     if (modulePath == nullptr)

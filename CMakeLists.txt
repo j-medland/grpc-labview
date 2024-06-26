@@ -1,25 +1,24 @@
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
-cmake_minimum_required(VERSION 3.5.1)
+cmake_minimum_required(VERSION 3.15)
 
-if(CMAKE_VERSION VERSION_GREATER_EQUAL "3.15") 
-  cmake_policy(SET CMP0091 NEW)
-endif()
+cmake_policy(SET CMP0091 NEW)
 
 project(labview-grpc C CXX)
 
 math(EXPR _BITNESS "8*${CMAKE_SIZEOF_VOID_P}")
 
-message(STATUS Building for ${_BITNESS}...)
+message(STATUS "Building for ${_BITNESS}-bit...")
 
 set(CMAKE_CXX_STANDARD 14)
+set(ABSL_PROPAGATE_CXX_STD=ON)
 set(C_VISIBILITY_PRESET hidden)
 set(CXX_VISIBILITY_PRESET hidden)
 set(VISIBILITY_INLINES_HIDDEN ON)
 set(WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 
 if(MSVC)
-  add_definitions(-D_WIN32_WINNT=0x600 -D_PS_${CMAKE_SIZEOF_VOID_P}))
+  add_definitions(-D_WIN32_WINNT=0x600 -D_PS_${CMAKE_SIZEOF_VOID_P})
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   add_compile_options("$<$<NOT:$<CONFIG:Debug>>:/Zi>")
   add_link_options("$<$<NOT:$<CONFIG:Debug>>:/DEBUG>")
@@ -30,9 +29,26 @@ endif()
 find_package(Threads REQUIRED)
 
 # ----------------------------------------------------------------------
-# Include the gRPC's cmake build
+# Get the project dependencies
 # ----------------------------------------------------------------------
-add_subdirectory(third_party/grpc ${CMAKE_CURRENT_BINARY_DIR}/grpc EXCLUDE_FROM_ALL)
+
+include(FetchContent)
+FetchContent_Declare(
+  gRPC
+  GIT_REPOSITORY https://github.com/grpc/grpc
+  GIT_TAG        591d56e1300b6d11948e1b821efac785a295989c  # V1.44
+)
+set(FETCHCONTENT_QUIET OFF)
+FetchContent_MakeAvailable(gRPC)
+
+FetchContent_Declare(
+  whereami
+  GIT_REPOSITORY    https://github.com/gpakosz/whereami.git
+  GIT_TAG f5e3eac441acbb4ec1fe3e2c32646248ae463398 # latest commit as of Jun 9, 2024
+  PATCH_COMMAND git apply ${CMAKE_CURRENT_SOURCE_DIR}/patches/whereami.patch # ensure patch UTF8 encoded! Use cmd /c "git diff > whereami.patch" on Windows
+  UPDATE_DISCONNECTED ON # prevents trying to patch multiple times
+)
+FetchContent_MakeAvailable(whereami)
 
 # ----------------------------------------------------------------------
 # Use the grpc targets directly from this build.
@@ -57,7 +73,7 @@ endif()
 # ----------------------------------------------------------------------
 # Include generated *.pb.h files
 # ----------------------------------------------------------------------
-include_directories("${CMAKE_CURRENT_BINARY_DIR}" "./src" "./third_party/grpc" "${CMAKE_CURRENT_BINARY_DIR}/gens")
+include_directories("${CMAKE_CURRENT_BINARY_DIR}" "./src" "./third_party/grpc" "${CMAKE_CURRENT_BINARY_DIR}/gens" 1`1)
 
 # ----------------------------------------------------------------------
 # LabVIEW support for grpc and protobuf
@@ -88,10 +104,11 @@ add_library(labview_grpc_server SHARED
   src/unpacked_fields.cc
 )
 target_link_libraries(labview_grpc_server
+  PRIVATE
+  whereami
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
-  ${_PROTOBUF_LIBPROTOBUF}
-  whereami)
+  ${_PROTOBUF_LIBPROTOBUF})
 
 set_target_properties(labview_grpc_server PROPERTIES OUTPUT_NAME labview_grpc_server${_BITNESS})
 
@@ -110,14 +127,6 @@ target_link_libraries(labview_grpc_generator
   ${_PROTOBUF_LIBPROTOBUF})
 
 set_target_properties(labview_grpc_generator PROPERTIES OUTPUT_NAME labview_grpc_generator${_BITNESS})
-
-# ----------------------------------------------------------------------
-# Source only third_party code to enable the .dll/.so to load
-# adjacent configuration files
-# ----------------------------------------------------------------------
-add_library(whereami INTERFACE third_party/whereami/src/whereami.c)
-target_include_directories(whereami INTERFACE third_party/whereami/src)
-
 
 # ######################################################################
 # QueryServer Example

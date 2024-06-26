@@ -59,8 +59,6 @@ namespace grpc_labview
     //---------------------------------------------------------------------
     void InitCallbacks()
     {
-        // Instantiating the feature toggles singleton that will read the feature configuration file
-        // FeatureConfig::getInstance().readConfigFromFile("feature_config.ini");
 
         if (NumericArrayResizeImp != nullptr)
         {
@@ -165,11 +163,11 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    void SetLVString(LStrHandle* lvString, std::string str)
+    void SetLVString(LStrHandle* lvString, const std::string &str)
     {
         auto length = str.length();    
         auto error = NumericArrayResize(0x01, 1, lvString, length);
-        memcpy((**lvString)->str, str.c_str(), length);
+        std::memcpy((**lvString)->str, str.data(), length);
         (**lvString)->cnt = (int)length;
     }
 
