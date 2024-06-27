@@ -121,8 +121,6 @@ target_link_libraries(labview_grpc_server
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
-set_target_properties(labview_grpc_server PROPERTIES OUTPUT_NAME labview_grpc_server${_BITNESS})
-
 # ----------------------------------------------------------------------
 # LabVIEW code generator support library to generate client and
 # server VIs from a .proto file
@@ -136,8 +134,6 @@ target_link_libraries(labview_grpc_generator
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
-
-set_target_properties(labview_grpc_generator PROPERTIES OUTPUT_NAME labview_grpc_generator${_BITNESS})
 
 # ######################################################################
 # QueryServer Example
@@ -240,17 +236,11 @@ add_dependencies(example_client Detect_Compatibility_Breaks)
 
 
 # ----------------------------------------------------------------------
-# Add a labview-src local install directory for easier dll/.so development/debugging
+# Add a labview-src local install directory for easier dll development/debugging
 # ----------------------------------------------------------------------
-SET(_LABVIEW_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/labview source")
-install(TARGETS labview_grpc_server
+SET(_LABVIEW_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/labview source/${_BITNESS}-bit")
+install(TARGETS labview_grpc_server labview_grpc_generator
+    COMPONENT ${PROJECT_NAME}
     RUNTIME DESTINATION ${_LABVIEW_SOURCE_DIR}
     LIBRARY DESTINATION ${_LABVIEW_SOURCE_DIR}
-    COMPONENT labview_grpc
-)
-
-install(TARGETS labview_grpc_generator
-    RUNTIME DESTINATION ${_LABVIEW_SOURCE_DIR}
-    LIBRARY DESTINATION ${_LABVIEW_SOURCE_DIR}
-    COMPONENT labview_grpc
 )

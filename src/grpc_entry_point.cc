@@ -29,7 +29,7 @@ static void onSharedLibraryLoad()
 #if defined(__GNUC__) && !defined(_WIN32)
 __attribute__((destructor))
 #endif
-static void on_shared_library_unload()
+static void onSharedLibraryUnload()
 {
   // nothing to do
 }
@@ -47,14 +47,14 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
   switch (ul_reason_for_call)
   {
     case DLL_PROCESS_ATTACH:
-      on_shared_library_load()
+      onSharedLibraryLoad();
       break;
     case DLL_THREAD_ATTACH:
       break;
     case DLL_THREAD_DETACH:
       break;
     case DLL_PROCESS_DETACH:
-      on_shared_library_unload();
+      onSharedLibraryUnload();
       break;
   }
   return TRUE;
