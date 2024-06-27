@@ -18,7 +18,7 @@ set(VISIBILITY_INLINES_HIDDEN ON)
 set(WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 
 if(MSVC)
-  add_definitions(-D_WIN32_WINNT=0x600 -D_PS_${CMAKE_SIZEOF_VOID_P})
+  add_definitions(-D_WIN32_WINNT=0x600)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   add_compile_options("$<$<NOT:$<CONFIG:Debug>>:/Zi>")
   add_link_options("$<$<NOT:$<CONFIG:Debug>>:/DEBUG>")
@@ -49,14 +49,6 @@ FetchContent_Declare(
   UPDATE_DISCONNECTED ON # prevents trying to patch multiple times
 )
 FetchContent_MakeAvailable(whereami)
-
-include(FetchContent)
-FetchContent_Declare(
-  ghc_filesystem
-  GIT_REPOSITORY https://github.com/gulrak/filesystem.git
-  GIT_TAG        8a2edd6d92ed820521d42c94d179462bf06b5ed3  # v1.5.14
-)
-FetchContent_MakeAvailable(ghc_filesystem)
 
 
 # ----------------------------------------------------------------------
@@ -116,10 +108,13 @@ add_library(labview_grpc_server SHARED
 target_link_libraries(labview_grpc_server
   PRIVATE
   whereami
-  ghc_filesystem
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
+
+if(MSVC)
+  target_compile_definitions(labview_grpc_server PRIVATE _PS_${CMAKE_SIZEOF_VOID_P})
+endif()
 
 # ----------------------------------------------------------------------
 # LabVIEW code generator support library to generate client and
@@ -129,11 +124,18 @@ add_library(labview_grpc_generator SHARED
   src/feature_toggles.cc
   src/lv_interop.cc
   src/proto_parser.cc
+  src/grpc_entry_point.cc
 )
 target_link_libraries(labview_grpc_generator
+  PRIVATE
+  whereami
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
+
+if(MSVC)
+  target_compile_definitions(labview_grpc_generator PRIVATE _PS_${CMAKE_SIZEOF_VOID_P})
+endif()
 
 # ######################################################################
 # QueryServer Example

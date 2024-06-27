@@ -19,23 +19,23 @@ static int kCleanOnIdle = 2;
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-typedef int (*NumericArrayResize_T)(int32_t, int32_t, void* handle, size_t size);
+typedef int (*NumericArrayResize_T)(int32_t, int32_t, void *handle, size_t size);
 typedef int (*PostLVUserEvent_T)(grpc_labview::LVUserEventRef ref, void *data);
-typedef int (*Occur_T)(grpc_labview::MagicCookie occurrence);
-typedef int32_t(*RTSetCleanupProc_T)(grpc_labview::CleanupProcPtr cleanUpProc, grpc_labview::gRPCid* id, int32_t mode);
-typedef unsigned char** (*DSNewHandlePtr_T)(size_t);
-typedef int (*DSSetHandleSize_T)(void* h, size_t);
-typedef long (*DSDisposeHandle_T)(void* h);
-
+// typedef int (*Occur_T)(grpc_labview::MagicCookie occurrence);
+typedef int32_t (*RTSetCleanupProc_T)(grpc_labview::CleanupProcPtr cleanUpProc, grpc_labview::gRPCid *id, int32_t mode);
+typedef unsigned char **(*DSNewHandlePtr_T)(size_t);
+typedef int (*DSSetHandleSize_T)(void *h, size_t);
+typedef long (*DSDisposeHandle_T)(void *h);
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 static NumericArrayResize_T NumericArrayResizeImp = nullptr;
 static PostLVUserEvent_T PostLVUserEvent = nullptr;
-static Occur_T Occur = nullptr;
+// static Occur_T Occur = nullptr;
 static RTSetCleanupProc_T RTSetCleanupProc = nullptr;
 
 static std::string ModulePath = "";
+static std::string SharedLibraryName = "";
 static DSNewHandlePtr_T DSNewHandleImpl = nullptr;
 static DSSetHandleSize_T DSSetHandleSizeImpl = nullptr;
 static DSDisposeHandle_T DSDisposeHandleImpl = nullptr;
@@ -43,15 +43,6 @@ static DSDisposeHandle_T DSDisposeHandleImpl = nullptr;
 namespace grpc_labview
 {
     grpc_labview::PointerManager<grpc_labview::gRPCid> gPointerManager;
-
-	//---------------------------------------------------------------------
-	// Allows for definition of the LVRT DLL path to be used for callback functions
-	// This function should be called prior to calling InitCallbacks()
-    //---------------------------------------------------------------------
-	void SetLVRTModulePath(std::string modulePath)
-	{
-		ModulePath = modulePath;
-	}
 
 #ifdef _WIN32
 
@@ -62,34 +53,57 @@ namespace grpc_labview
 
         if (NumericArrayResizeImp != nullptr)
         {
+            // already loaded these functions
             return;
         }
 
-		HMODULE lvModule;
+        // Search for a Module which Exports the LabVIEW Functions we are after
+        HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
+        MODULEENTRY32 me32;
+        HMODULE lvModule;
 
-		if(ModulePath != "")
-		{
-			lvModule = GetModuleHandle(ModulePath.c_str());
-		}
-		else
-		{
-			lvModule = GetModuleHandle("LabVIEW.exe");
-			if (lvModule == nullptr)
-			{
-				lvModule = GetModuleHandle("lvffrt.dll");
-			}
-			if (lvModule == nullptr)
-			{
-				lvModule = GetModuleHandle("lvrt.dll");
-			}
-		}
-        NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(lvModule, "NumericArrayResize");
-        PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(lvModule, "PostLVUserEvent");
-        Occur = (Occur_T)GetProcAddress(lvModule, "Occur");
-        RTSetCleanupProc = (RTSetCleanupProc_T)GetProcAddress(lvModule, "RTSetCleanupProc");
-        DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(lvModule, "DSNewHandle");
-        DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(lvModule, "DSSetHandleSize");
-        DSDisposeHandleImpl = (DSDisposeHandle_T)GetProcAddress(lvModule, "DSDisposeHandle");
+        //  Take a snapshot of all modules in the specified process.
+        hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
+        if (hModuleSnap == INVALID_HANDLE_VALUE)
+        {
+            // snapshot failed
+            return;
+        }
+
+        //  Set the size of the structure before using it.
+        me32.dwSize = sizeof(MODULEENTRY32);
+
+        //  Retrieve information about the first module
+        if (!Module32First(hModuleSnap, &me32))
+        {
+            // first retrieval failed
+            return;
+        }
+
+        //  Loop through, looking for a Module that exports a specific function
+        do
+        {
+            // check for a quite specific seeming LabVIEW.exe / LV-Runtime export
+            if (GetProcAddress(me32.hModule, "DSSetAlignedHandleSize"))
+            {
+                // found!
+                lvModule = me32.hModule;
+                break;
+            }
+        } while (Module32Next(hModuleSnap, &me32));
+
+        CloseHandle(hModuleSnap);
+
+        if (lvModule)
+        {
+            NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(lvModule, "NumericArrayResize");
+            PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(lvModule, "PostLVUserEvent");
+            // Occur = (Occur_T)GetProcAddress(lvModule, "Occur");
+            RTSetCleanupProc = (RTSetCleanupProc_T)GetProcAddress(lvModule, "RTSetCleanupProc");
+            DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(lvModule, "DSNewHandle");
+            DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(lvModule, "DSSetHandleSize");
+            DSDisposeHandleImpl = (DSDisposeHandle_T)GetProcAddress(lvModule, "DSDisposeHandle");
+        }
     }
 
 #else
@@ -128,8 +142,8 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    int NumericArrayResize(int32_t typeCode, int32_t numDims, void* handle, size_t size)
-    {    
+    int NumericArrayResize(int32_t typeCode, int32_t numDims, void *handle, size_t size)
+    {
         return NumericArrayResizeImp(typeCode, numDims, handle, size);
     }
 
@@ -137,35 +151,35 @@ namespace grpc_labview
     //---------------------------------------------------------------------
     int PostUserEvent(LVUserEventRef ref, void *data)
     {
-        return PostLVUserEvent(ref, data);    
+        return PostLVUserEvent(ref, data);
     }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    unsigned char** DSNewHandle(size_t n)
+    unsigned char **DSNewHandle(size_t n)
     {
         return DSNewHandleImpl(n);
     }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    int DSSetHandleSize(void* h, size_t n)
+    int DSSetHandleSize(void *h, size_t n)
     {
         return DSSetHandleSizeImpl(h, n);
     }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    long DSDisposeHandle(void* h)
+    long DSDisposeHandle(void *h)
     {
         return DSDisposeHandleImpl(h);
     }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    void SetLVString(LStrHandle* lvString, const std::string &str)
+    void SetLVString(LStrHandle *lvString, const std::string &str)
     {
-        auto length = str.length();    
+        auto length = str.length();
         auto error = NumericArrayResize(0x01, 1, lvString, length);
         std::memcpy((**lvString)->str, str.data(), length);
         (**lvString)->cnt = (int)length;
@@ -174,7 +188,7 @@ namespace grpc_labview
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     std::string GetLVString(LStrHandle lvString)
-    {    
+    {
         if (lvString == nullptr || *lvString == nullptr)
         {
             return std::string();
@@ -189,14 +203,14 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    int32_t RegisterCleanupProc(CleanupProcPtr cleanUpProc, gRPCid* id)
+    int32_t RegisterCleanupProc(CleanupProcPtr cleanUpProc, gRPCid *id)
     {
         return RTSetCleanupProc(cleanUpProc, id, kCleanOnIdle);
     }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    int32_t DeregisterCleanupProc(CleanupProcPtr cleanUpProc, gRPCid* id)
+    int32_t DeregisterCleanupProc(CleanupProcPtr cleanUpProc, gRPCid *id)
     {
         return RTSetCleanupProc(cleanUpProc, id, kCleanOnRemove);
     }

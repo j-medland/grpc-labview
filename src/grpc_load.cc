@@ -15,9 +15,9 @@ namespace grpc_labview
     LibHandle LockgRPCLibraryIntoProcessMem()
     {
 #if _WIN32
-        auto dllHandle = LoadLibrary("labview_grpc_server.dll");
+        auto dllHandle = LoadLibrary(SharedLibraryName);
 #else
-        auto dllHandle = dlopen("liblabview_grpc_server.so", RTLD_LAZY);
+        auto dllHandle = dlopen(SharedLibraryName, RTLD_LAZY);
 #endif
         return dllHandle;
     }
