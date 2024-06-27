@@ -110,4 +110,5 @@
 		<Item Name="TranslateGrpcError.vi" Type="VI" URL="../Shared/TranslateGrpcError.vi"/>
 		<Item Name="Wait On Occurrence Wrapper.vi" Type="VI" URL="../Shared/Wait On Occurrence Wrapper.vi"/>
 	</Item>
+	<Item Name="Create Occurance.vi" Type="VI" URL="../Shared/Create Occurance.vi"/>
 </Library>

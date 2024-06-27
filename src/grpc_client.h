@@ -55,7 +55,7 @@ namespace grpc_labview
     public:
         std::shared_ptr<grpc_labview::LabVIEWgRPCClient> _client;
         std::string _methodName;
-        MagicCookie _occurrence;
+        LVUserEventRef _occurrenceUserEvent;
         std::shared_ptr<ClientContext> _context;
         std::shared_ptr<LVMessage> _request;
         std::shared_ptr<LVMessage> _response;
