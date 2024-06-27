@@ -11,18 +11,27 @@ __attribute__((constructor))
 // use static to restrict access to this function to this translation unit
 static void onSharedLibraryLoad()
 {
-  int length, dirnameLength;
-  std::string modulePathString;
+  int length;
+  std::string executablePathString;
+  
+  length = wai_getExecutablePath(nullptr, 0, nullptr);
+  if (length > 0)
+  {
+    executablePathString.reserve(length);
+    wai_getExecutablePath(&executablePathString[0], length, nullptr);
+  }
 
-  length = wai_getModulePath(nullptr, 0, &dirnameLength);
+  std::string modulePathString, moduleDirectoryString;
+
+  int dirnameLength;
+  length = wai_getModulePath(nullptr, 0, nullptr);
   if (length > 0)
   {
     modulePathString.reserve(length);
     wai_getModulePath(&modulePathString[0], length, &dirnameLength);
-    fs::path modulePath{modulePathString};
-    fs::path featuresConfigFilePath = modulePath.parent_path().append("feature_config.ini");
+    moduleDirectoryString = modulePathString.substr(dirnameLength);
 
-    grpc_labview::FeatureConfig::getInstance().readConfigFromFile(featuresConfigFilePath.string());
+    grpc_labview::FeatureConfig::getInstance().readConfigFromFile(moduleDirectoryString + "/features_config.ini");
   }
 }
 
