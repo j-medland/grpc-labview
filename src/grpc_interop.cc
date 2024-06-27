@@ -189,9 +189,9 @@ int32_t ServerCleanupProc(grpc_labview::gRPCid* serverId);
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT void readIniFile(const char* filePath)
+LIBRARY_EXPORT void IsFeatureToggleSet(const char* filePath, uint8_t* isSet)
 {
-    grpc_labview::FeatureConfig::getInstance().readConfigFromFile(filePath);
+    *isSet = grpc_labview::FeatureConfig::getInstance().isFeatureEnabled(filePath)? 1 : 0;
 }
 
 //---------------------------------------------------------------------

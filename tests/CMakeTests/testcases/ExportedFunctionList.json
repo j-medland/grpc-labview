@@ -822,6 +822,15 @@
         "const char*",
         "int8_t*"
       ]
+    },
+    {
+      "id": 85,
+      "function_name": "IsFeatureToggleSet",
+      "return_type": "void",
+      "parameter_list": [
+        "const char*",
+        "uint8_t*"
+      ]
     }
   ]
 }

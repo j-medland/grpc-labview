@@ -17,7 +17,7 @@ static void onSharedLibraryLoad()
   length = wai_getExecutablePath(nullptr, 0, nullptr);
   if (length > 0)
   {
-    executablePathString.reserve(length);
+    executablePathString.resize(length);
     wai_getExecutablePath(&executablePathString[0], length, nullptr);
   }
 
@@ -27,9 +27,9 @@ static void onSharedLibraryLoad()
   length = wai_getModulePath(nullptr, 0, nullptr);
   if (length > 0)
   {
-    modulePathString.reserve(length);
+    modulePathString.resize(length);
     wai_getModulePath(&modulePathString[0], length, &dirnameLength);
-    moduleDirectoryString = modulePathString.substr(dirnameLength);
+    moduleDirectoryString = modulePathString.substr(0,dirnameLength);
 
     grpc_labview::FeatureConfig::getInstance().readConfigFromFile(moduleDirectoryString + "/features_config.ini");
   }

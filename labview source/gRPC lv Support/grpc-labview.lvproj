@@ -34,7 +34,7 @@
 				<Item Name="Trim Whitespace.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Trim Whitespace.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>
 			</Item>
-			<Item Name="labview_grpc_server.dll" Type="Document" URL="../../32-bit/labview_grpc_server.dll"/>
+			<Item Name="labview_grpc_server.dll" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dll"/>
 			<Item Name="labview_grpc_server.dlls" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dlls"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build"/>
