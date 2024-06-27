@@ -50,6 +50,15 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(whereami)
 
+include(FetchContent)
+FetchContent_Declare(
+  ghc_filesystem
+  GIT_REPOSITORY https://github.com/gulrak/filesystem.git
+  GIT_TAG        8a2edd6d92ed820521d42c94d179462bf06b5ed3  # v1.5.14
+)
+FetchContent_MakeAvailable(ghc_filesystem)
+
+
 # ----------------------------------------------------------------------
 # Use the grpc targets directly from this build.
 # ----------------------------------------------------------------------
@@ -102,10 +111,12 @@ add_library(labview_grpc_server SHARED
   src/lv_proto_server_reflection_service.cc
   src/message_element_metadata_owner.cc
   src/unpacked_fields.cc
+  src/grpc_entry_point.cc
 )
 target_link_libraries(labview_grpc_server
   PRIVATE
   whereami
+  ghc_filesystem
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
@@ -226,3 +237,20 @@ add_dependencies(labview_grpc_generator Detect_Compatibility_Breaks)
 add_dependencies(test_client Detect_Compatibility_Breaks)
 add_dependencies(test_server Detect_Compatibility_Breaks)
 add_dependencies(example_client Detect_Compatibility_Breaks)
+
+
+# ----------------------------------------------------------------------
+# Add a labview-src local install directory for easier dll/.so development/debugging
+# ----------------------------------------------------------------------
+SET(_LABVIEW_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/labview source")
+install(TARGETS labview_grpc_server
+    RUNTIME DESTINATION ${_LABVIEW_SOURCE_DIR}
+    LIBRARY DESTINATION ${_LABVIEW_SOURCE_DIR}
+    COMPONENT labview_grpc
+)
+
+install(TARGETS labview_grpc_generator
+    RUNTIME DESTINATION ${_LABVIEW_SOURCE_DIR}
+    LIBRARY DESTINATION ${_LABVIEW_SOURCE_DIR}
+    COMPONENT labview_grpc
+)

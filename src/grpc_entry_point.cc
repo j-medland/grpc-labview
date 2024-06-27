@@ -1,29 +1,35 @@
 #include <string>
 #include <whereami.h>
+#include <ghc/fs_std.hpp>
+
+#include <feature_toggles.h>
 
 #if defined(__GNUC__) && !defined(_WIN32)
 __attribute__((constructor))
 #endif
 
 // use static to restrict access to this function to this translation unit
-static void on_shared_library_load(void)
+static void onSharedLibraryLoad()
 {
-  int length, dirname_length;
-  std::string path;
+  int length, dirnameLength;
+  std::string modulePathString;
 
-  length = wai_getModulePath(nullptr, 0, &dirname_length);
+  length = wai_getModulePath(nullptr, 0, &dirnameLength);
   if (length > 0)
   {
-    path.reserve(length);
-    wai_getModulePath(&path[0], length, &dirname_length);
+    modulePathString.reserve(length);
+    wai_getModulePath(&modulePathString[0], length, &dirnameLength);
+    fs::path modulePath{modulePathString};
+    fs::path featuresConfigFilePath = modulePath.parent_path().append("feature_config.ini");
 
+    grpc_labview::FeatureConfig::getInstance().readConfigFromFile(featuresConfigFilePath.string());
   }
 }
 
 #if defined(__GNUC__) && !defined(_WIN32)
 __attribute__((destructor))
 #endif
-static void on_shared_library_unload(void)
+static void on_shared_library_unload()
 {
   // nothing to do
 }
@@ -41,14 +47,14 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD  ul_reason_for_call, LPVOID lpReser
   switch (ul_reason_for_call)
   {
     case DLL_PROCESS_ATTACH:
-      load();
+      on_shared_library_load()
       break;
     case DLL_THREAD_ATTACH:
       break;
     case DLL_THREAD_DETACH:
       break;
     case DLL_PROCESS_DETACH:
-      unload();
+      on_shared_library_unload();
       break;
   }
   return TRUE;
