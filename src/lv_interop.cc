@@ -47,12 +47,12 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    void InitCallbacks()
+    void InitCallbacks(LVUserEventRef callbacksInitializedEvent)
     {
-
-        if (NumericArrayResizeImp && PostLVUserEvent && Occur && RTSetCleanupProc && DSNewHandleImpl && DSSetHandleSizeImpl && DSDisposeHandleImpl)
+        uint8_t data = 1;
+        if (PostLVUserEvent)
         {
-            // already loaded these functions
+            PostLVUserEvent(callbacksInitializedEvent, &data);
             return;
         }
 
@@ -81,27 +81,18 @@ namespace grpc_labview
         //  Loop through, looking for a Module that exports the functions we are after
         do
         {
-            NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(me32.hModule, "NumericArrayResize");
-            if (!NumericArrayResizeImp)
-                continue;
             PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(me32.hModule, "PostLVUserEvent");
-            if (!PostLVUserEvent)
+            // validate that this module is in the correct context by trying to generate a user event
+            if (!PostLVUserEvent || PostLVUserEvent(callbacksInitializedEvent, &data)){
+                // skip this iteration and keep looping
                 continue;
+            }
+            NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(me32.hModule, "NumericArrayResize");
             Occur = (Occur_T)GetProcAddress(me32.hModule, "Occur");
-            if (!Occur)
-                continue;
             RTSetCleanupProc = (RTSetCleanupProc_T)GetProcAddress(me32.hModule, "RTSetCleanupProc");
-            if (!RTSetCleanupProc)
-                continue;
             DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(me32.hModule, "DSNewHandle");
-            if (!DSNewHandleImpl)
-                continue;
             DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(me32.hModule, "DSSetHandleSize");
-            if (!DSSetHandleSizeImpl)
-                continue;
             DSDisposeHandleImpl = (DSDisposeHandle_T)GetProcAddress(me32.hModule, "DSDisposeHandle");
-            if (!DSDisposeHandleImpl)
-                continue;
             //break;
         } while (Module32Next(hModuleSnap, &me32));
 
@@ -112,7 +103,7 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    void InitCallbacks()
+    void InitCallbacks(LVUserEventRef callbacksInitializedEvent, &data)
     {
         if (NumericArrayResizeImp != nullptr)
         {
@@ -131,6 +122,9 @@ namespace grpc_labview
         {
             exit(grpc::StatusCode::INTERNAL);
         }
+        // signal succes
+        uint8_t data = 1;
+        PostLVUserEvent(callbacksInitializedEvent, &data);
     }
 
 #endif

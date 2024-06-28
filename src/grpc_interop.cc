@@ -195,9 +195,9 @@ LIBRARY_EXPORT void IsFeatureToggleSet(const char *filePath, uint8_t *isSet)
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVCreateServer(grpc_labview::gRPCid **id)
+LIBRARY_EXPORT int32_t LVCreateServer(grpc_labview::gRPCid **id, grpc_labview::LVUserEventRef *callbackInitAck)
 {
-    grpc_labview::InitCallbacks();
+    grpc_labview::InitCallbacks(*callbackInitAck);
     auto server = new grpc_labview::LabVIEWgRPCServer();
     grpc_labview::gPointerManager.RegisterPointer(server);
     *id = server;
@@ -461,74 +461,4 @@ LIBRARY_EXPORT int32_t IsCancelled(grpc_labview::gRPCid **id)
         return -1;
     }
     return data->_call->IsCancelled();
-}
-
-//////////////////////////////////////////////////////////////////////////
-
-#ifdef _PS_4
-#pragma pack(push, 1)
-#endif
-struct LStrArray
-{
-    int32_t cnt;                     /* number of bytes that follow */
-    grpc_labview::LStrHandle str[1]; /* cnt bytes */
-};
-#ifdef _PS_4
-#pragma pack(pop)
-#endif
-
-LIBRARY_EXPORT void get_module_name(LStrArray **skip, grpc_labview::LVUserEventRef *ref, grpc_labview::LStr** test, int32_t *res)
-{
-    
-    typedef int (*PostLVUserEvent_T)(grpc_labview::LVUserEventRef ref, void *data);
-    std::vector<std::string> skip_list;
-
-    int32_t list_len = *skip && (*skip) ? (*skip)->cnt : 0;
-
-    for(int32_t i=0; i<list_len; ++i){
-        auto h = ((*skip)->str[i]);
-        skip_list.emplace_back(&((*h)->str[0]), (*h)->cnt);
-    }
-
-    // Search for a Module which Exports the LabVIEW Functions we are after
-    HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
-    MODULEENTRY32 me32;
-
-    //  Take a snapshot of all modules in the specified process.
-    hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
-    if (hModuleSnap == INVALID_HANDLE_VALUE)
-    {
-        // snapshot failed
-        return;
-    }
-
-    //  Set the size of the structure before using it.
-    me32.dwSize = sizeof(MODULEENTRY32);
-
-    //  Retrieve information about the first module
-    if (!Module32First(hModuleSnap, &me32))
-    {
-        // first retrieval failed
-        return;
-    }
-
-    //  Loop through, looking for a Module that exports the functions we are after
-    do
-    {
-        std::string current(me32.szExePath);
-        if(std::find(skip_list.begin(), skip_list.end(),current)==skip_list.end()){
-            // unique
-            auto x = (PostLVUserEvent_T)GetProcAddress(me32.hModule, "PostLVUserEvent");
-            if(x){
-                * res = x(*ref, &list_len);
-                std::memcpy(&((*test)->str[0]), current.data(), std::min(static_cast<size_t>((*test)->cnt), current.length()));
-                (*test)->cnt = current.length();
-                break;
-            }
-        }
-
-    } while (Module32Next(hModuleSnap, &me32));
-
-    CloseHandle(hModuleSnap);
-    return;
 }
