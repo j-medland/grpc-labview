@@ -273,8 +273,8 @@ LIBRARY_EXPORT int32_t CloseClientContext(grpc_labview::gRPCid *contextId)
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 LIBRARY_EXPORT int32_t ClientUnaryCall2(
-    grpc_labview::gRPCid *clientId,
     grpc_labview::LVUserEventRef *occurrenceUserEvent,
+    grpc_labview::gRPCid *clientId,
     const char *methodName,
     const char *requestMessageName,
     const char *responseMessageName,
@@ -374,8 +374,8 @@ LIBRARY_EXPORT int32_t ClientUnaryCall2(
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 LIBRARY_EXPORT int32_t ClientUnaryCall(
+    grpc_labview::LVUserEventRef *occurrenceUserEvent,
     grpc_labview::gRPCid *clientId,
-    grpc_labview::LVUserEventRef *occurrence,
     const char *methodName,
     const char *requestMessageName,
     const char *responseMessageName,
@@ -384,7 +384,7 @@ LIBRARY_EXPORT int32_t ClientUnaryCall(
     int32_t timeoutMs,
     grpc_labview::gRPCid *contextId)
 {
-    return ClientUnaryCall2(clientId, occurrence, methodName, requestMessageName, responseMessageName, requestCluster, callId, timeoutMs, contextId, nullptr);
+    return ClientUnaryCall2(occurrenceUserEvent, clientId, methodName, requestMessageName, responseMessageName, requestCluster, callId, timeoutMs, contextId, nullptr);
 }
 
 
@@ -784,7 +784,7 @@ LIBRARY_EXPORT int32_t FinishClientCompleteClientStreamingCall(
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t ClientCompleteClientStreamingCall(grpc_labview::gRPCid *callId, grpc_labview::LVUserEventRef *occurrencePtr)
+LIBRARY_EXPORT int32_t ClientCompleteClientStreamingCall( grpc_labview::LVUserEventRef *occurrenceUserEvent, grpc_labview::gRPCid *callId)
 {
     auto call = callId->CastTo<grpc_labview::ClientCall>();
     if (!call)
@@ -794,7 +794,7 @@ LIBRARY_EXPORT int32_t ClientCompleteClientStreamingCall(grpc_labview::gRPCid *c
     auto featureConfig = grpc_labview::FeatureConfig::getInstance();
 
     if(featureConfig.isFeatureEnabled("data_useOccurrence")){
-        call->_occurrenceUserEvent = *occurrencePtr;
+        call->_occurrenceUserEvent = *occurrenceUserEvent;
     }
     else{
         call->_occurrenceUserEvent = 0;

@@ -146,8 +146,8 @@
       "function_name": "ClientCompleteClientStreamingCall",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid*",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::LVUserEventRef*",
+        "grpc_labview::gRPCid*"
       ]
     },
     {
@@ -175,8 +175,8 @@
       "function_name": "ClientUnaryCall",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid*",
         "grpc_labview::LVUserEventRef*",
+        "grpc_labview::gRPCid*",
         "const char*",
         "const char*",
         "const char*",
@@ -191,8 +191,8 @@
       "function_name": "ClientUnaryCall2",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid*",
         "grpc_labview::LVUserEventRef*",
+        "grpc_labview::gRPCid*",
         "const char*",
         "const char*",
         "const char*",
@@ -278,10 +278,10 @@
       "function_name": "CreateClient",
       "return_type": "int32_t",
       "parameter_list": [
+        "grpc_labview::LVUserEventRef*",
         "const char*",
         "const char*",
-        "grpc_labview::gRPCid**",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::gRPCid**"
       ]
     },
     {
