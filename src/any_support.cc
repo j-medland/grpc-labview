@@ -55,7 +55,7 @@ LIBRARY_EXPORT int32_t PackToBuffer(grpc_labview::gRPCid* id, const char* messag
         NumericArrayResize(0x01, 1, lvBuffer, buffer.length());
         (**lvBuffer)->cnt = buffer.length();
         uint8_t* elements = (**lvBuffer)->bytes<uint8_t>();
-        memcpy(elements, buffer.c_str(), buffer.length());
+        std::memcpy(elements, buffer.c_str(), buffer.length());
         return 0;
     }
     return -2;
