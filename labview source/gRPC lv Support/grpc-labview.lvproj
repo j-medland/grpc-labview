@@ -26,7 +26,6 @@
 				<Item Name="NI_FileType.lvlib" Type="Library" URL="/&lt;vilib&gt;/Utility/lvfile.llb/NI_FileType.lvlib"/>
 			</Item>
 			<Item Name="labview_grpc_server.dll" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dll"/>
-			<Item Name="labview_grpc_server.dlls" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dlls"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build">
 			<Item Name="My Application" Type="EXE">

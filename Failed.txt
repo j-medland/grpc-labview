@@ -1,34 +1,7 @@
 [build]   =========================== short test summary info ===========================
-_signature1] 'AnyBuilderBegin', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-_signature13] 'ClientCompleteClientStreamingCall', 'parameter_list': ['grpc_labview::gRPCid*', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-_signature16] 'ClientUnaryCall', 'parameter_list': ['grpc_labview::gRPCid*', 'grpc_labview::LVUserEventRef*', 'const char*', 'const char*', 'const char*', 'int8_t*', ...], 'return_type': 'int32_t'}
-_signature17] 'ClientUnaryCall2', 'parameter_list': ['grpc_labview::gRPCid*', 'grpc_labview::LVUserEventRef*', 'const char*', 'const char*', 'const char*', 'int8_t*', ...], 'return_type': 'int32_t'}
-_signature26] 'CreateClient', 'parameter_list': ['const char*', 'const char*', 'grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-_signature28] 'CreateSerializationSession', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-_signature33] 'GetEnumInfo', 'parameter_list': ['EnumDescriptor*', 'grpc_labview::EnumFieldCluster*'], 'return_type': 'int'}
-_signature41] 'LVAddParserSearchPath', 'parameter_list': ['grpc_labview::LVProtoParser*', 'const char*'], 'return_type': 'int'}
-_signature42] 'LVCreateParser', 'parameter_list': ['grpc_labview::LVProtoParser**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int'}
-_signature43] 'LVCreateServer', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-_signature44] 'LVEnumName', 'parameter_list': ['EnumDescriptor*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-_signature45] 'LVEnumTypeUrl', 'parameter_list': ['EnumDescriptor*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-_signature46] 'LVFieldInfo', 'parameter_list': ['FieldDescriptor*', 'grpc_labview::MessageFieldCluster*'], 'return_type': 'int'}
-_signature47] 'LVGetEnums', 'parameter_list': ['grpc_labview::LVProtoParser*', 'grpc_labview::LV1DArrayHandle*', 'grpc_labview::LV1DArrayHandle*'], 'return_type': 'int'}
-_signature48] 'LVGetErrorString', 'parameter_list': ['grpc_labview::LVProtoParser*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-_signature49] 'LVGetFields', 'parameter_list': ['Descriptor*', 'grpc_labview::LV1DArrayHandle*'], 'return_type': 'int'}
-_signature50] 'LVGetMessages', 'parameter_list': ['grpc_labview::LVProtoParser*', 'grpc_labview::LV1DArrayHandle*'], 'return_type': 'int'}
-_signature51] 'LVGetMethodFullName', 'parameter_list': ['MethodDescriptor*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-_signature52] 'LVGetMethodInput', 'parameter_list': ['MethodDescriptor*', 'const Descriptor**'], 'return_type': 'int'}
-_signature53] 'LVGetMethodName', 'parameter_list': ['MethodDescriptor*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-_signature54] 'LVGetMethodOutput', 'parameter_list': ['MethodDescriptor*', 'const Descriptor**'], 'return_type': 'int'}
-_signature56] 'LVGetServiceMethods', 'parameter_list': ['ServiceDescriptor*', 'grpc_labview::LV1DArrayHandle*'], 'return_type': 'int'}
-_signature57] 'LVGetServiceName', 'parameter_list': ['ServiceDescriptor*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-_signature58] 'LVGetServices', 'parameter_list': ['grpc_labview::LVProtoParser*', 'grpc_labview::LV1DArrayHandle*'], 'return_type': 'int'}
-_signature59] 'LVGetgRPCAPIVersion', 'parameter_list': ['int*', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int'}
-_signature60] 'LVImportProto', 'parameter_list': ['const char*', 'const char*', 'grpc_labview::LVProtoParser**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int'}
-_signature61] 'LVImportProto2', 'parameter_list': ['grpc_labview::LVProtoParser*', 'const char*', 'const char*'], 'return_type': 'int'}
-_signature62] 'LVIsMethodClientStreaming', 'parameter_list': ['MethodDescriptor*', 'int*'], 'return_type': 'int'}
-_signature63] 'LVIsMethodServerStreaming', 'parameter_list': ['MethodDescriptor*', 'int*'], 'return_type': 'int'}
-_signature64] 'LVMessageHasOneof', 'parameter_list': ['Descriptor*', 'int*'], 'return_type': 'int'}
-_signature65] 'LVMessageName', 'parameter_list': ['Descriptor*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-_signature66] 'LVMessageTypeUrl', 'parameter_list': ['Descriptor*', 'grpc_labview::LStrHandle*'], 'return_type': 'int'}
-[build]   ======================== 32 failed, 53 passed in 0.73s ========================
+1] - 'AnyBuilderBegin', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
+28] - 'CreateSerializationSession', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
+42] - 'LVCreateParser', 'parameter_list': ['grpc_labview::LVProtoParser**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
+43] - 'LVCreateServer', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
+59] - 'LVGetgRPCAPIVersion', 'parameter_list': ['int*', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
+60] - 'LVImportProto', 'parameter_list': ['const char*', 'const char*', 'grpc_labview::LVProtoParser**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}

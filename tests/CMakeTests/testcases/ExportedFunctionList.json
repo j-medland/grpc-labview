@@ -339,7 +339,7 @@
     {
       "id": 33,
       "function_name": "GetEnumInfo",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "EnumDescriptor*",
         "grpc_labview::EnumFieldCluster*"
@@ -419,7 +419,7 @@
     {
       "id": 41,
       "function_name": "LVAddParserSearchPath",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "const char*"
@@ -428,7 +428,7 @@
     {
       "id": 42,
       "function_name": "LVCreateParser",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser**",
         "grpc_labview::LVUserEventRef*"
@@ -446,7 +446,7 @@
     {
       "id": 44,
       "function_name": "LVEnumName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "EnumDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -455,7 +455,7 @@
     {
       "id": 45,
       "function_name": "LVEnumTypeUrl",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "EnumDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -464,7 +464,7 @@
     {
       "id": 46,
       "function_name": "LVFieldInfo",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "FieldDescriptor*",
         "grpc_labview::MessageFieldCluster*"
@@ -473,7 +473,7 @@
     {
       "id": 47,
       "function_name": "LVGetEnums",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LV1DArrayHandle*",
@@ -483,7 +483,7 @@
     {
       "id": 48,
       "function_name": "LVGetErrorString",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LStrHandle*"
@@ -492,7 +492,7 @@
     {
       "id": 49,
       "function_name": "LVGetFields",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "grpc_labview::LV1DArrayHandle*"
@@ -501,7 +501,7 @@
     {
       "id": 50,
       "function_name": "LVGetMessages",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LV1DArrayHandle*"
@@ -510,7 +510,7 @@
     {
       "id": 51,
       "function_name": "LVGetMethodFullName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -519,7 +519,7 @@
     {
       "id": 52,
       "function_name": "LVGetMethodInput",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "const Descriptor**"
@@ -528,7 +528,7 @@
     {
       "id": 53,
       "function_name": "LVGetMethodName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -537,7 +537,7 @@
     {
       "id": 54,
       "function_name": "LVGetMethodOutput",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "const Descriptor**"
@@ -555,7 +555,7 @@
     {
       "id": 56,
       "function_name": "LVGetServiceMethods",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "ServiceDescriptor*",
         "grpc_labview::LV1DArrayHandle*"
@@ -564,7 +564,7 @@
     {
       "id": 57,
       "function_name": "LVGetServiceName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "ServiceDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -573,7 +573,7 @@
     {
       "id": 58,
       "function_name": "LVGetServices",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LV1DArrayHandle*"
@@ -582,7 +582,7 @@
     {
       "id": 59,
       "function_name": "LVGetgRPCAPIVersion",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "int*",
         "grpc_labview::LVUserEventRef*"
@@ -591,7 +591,7 @@
     {
       "id": 60,
       "function_name": "LVImportProto",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "const char*",
         "const char*",
@@ -602,7 +602,7 @@
     {
       "id": 61,
       "function_name": "LVImportProto2",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "const char*",
@@ -612,7 +612,7 @@
     {
       "id": 62,
       "function_name": "LVIsMethodClientStreaming",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "int*"
@@ -621,7 +621,7 @@
     {
       "id": 63,
       "function_name": "LVIsMethodServerStreaming",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "int*"
@@ -630,7 +630,7 @@
     {
       "id": 64,
       "function_name": "LVMessageHasOneof",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "int*"
@@ -639,7 +639,7 @@
     {
       "id": 65,
       "function_name": "LVMessageName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "grpc_labview::LStrHandle*"
@@ -648,7 +648,7 @@
     {
       "id": 66,
       "function_name": "LVMessageTypeUrl",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "grpc_labview::LStrHandle*"
