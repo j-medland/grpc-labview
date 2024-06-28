@@ -477,7 +477,7 @@ struct LStrArray
 #pragma pack(pop)
 #endif
 
-LIBRARY_EXPORT void get_module_name(LStrArray **skip, grpc_labview::LVUserEventRef *ref, grpc_labview::LStr** test)
+LIBRARY_EXPORT void get_module_name(LStrArray **skip, grpc_labview::LVUserEventRef *ref, grpc_labview::LStr** test, int32_t *res)
 {
     
     typedef int (*PostLVUserEvent_T)(grpc_labview::LVUserEventRef ref, void *data);
@@ -520,7 +520,7 @@ LIBRARY_EXPORT void get_module_name(LStrArray **skip, grpc_labview::LVUserEventR
             // unique
             auto x = (PostLVUserEvent_T)GetProcAddress(me32.hModule, "PostLVUserEvent");
             if(x){
-                x(*ref, &list_len);
+                * res = x(*ref, &list_len);
                 std::memcpy(&((*test)->str[0]), current.data(), std::min(static_cast<size_t>((*test)->cnt), current.length()));
                 (*test)->cnt = current.length();
                 break;
