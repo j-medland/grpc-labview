@@ -5,3 +5,6 @@ https://github.com/ni/grpc-labview/issues/207
 Calling gRPC Client VIs from TestStand hang at "Wait for Occurrence" while using LabVIEW RTE
 
 https://github.com/ni/grpc-labview/issues/330
+
+TODO
+[] check for int's in the exported call signatures and adjust to use pointer sized signed int

@@ -11,15 +11,6 @@ __attribute__((constructor))
 static void onSharedLibraryLoad()
 {
   int length;
-  std::string executablePathString;
-  
-  length = wai_getExecutablePath(nullptr, 0, nullptr);
-  if (length > 0)
-  {
-    executablePathString.resize(length);
-    wai_getExecutablePath(&executablePathString[0], length, nullptr);
-  }
-
   std::string modulePathString, moduleDirectoryString;
 
   int dirnameLength;
@@ -30,8 +21,6 @@ static void onSharedLibraryLoad()
     wai_getModulePath(&modulePathString[0], length, &dirnameLength);
 
     moduleDirectoryString = modulePathString.substr(0,dirnameLength);
-
-    grpc_labview::SetSharedLibraryName(modulePathString.substr(dirnameLength+1));
 
     grpc_labview::FeatureConfig::getInstance().readConfigFromFile(moduleDirectoryString + "/features_config.ini");
   }

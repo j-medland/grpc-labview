@@ -34,7 +34,6 @@ static PostLVUserEvent_T PostLVUserEvent = nullptr;
 static Occur_T Occur = nullptr;
 static RTSetCleanupProc_T RTSetCleanupProc = nullptr;
 
-static std::string SharedLibraryName = "";
 static DSNewHandlePtr_T DSNewHandleImpl = nullptr;
 static DSSetHandleSize_T DSSetHandleSizeImpl = nullptr;
 static DSDisposeHandle_T DSDisposeHandleImpl = nullptr;
@@ -84,6 +83,7 @@ namespace grpc_labview
             uint8_t dummyData;
             PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(me32.hModule, "PostLVUserEvent");
             // validate that this module is in the correct context by trying to generate a user event
+            // PostLVUserEvent returns non-zero value on failure
             if (!PostLVUserEvent || PostLVUserEvent(callbacksInitializedEvent, &dummyData)){
                 // skip this iteration and keep looping
                 continue;
@@ -94,6 +94,7 @@ namespace grpc_labview
             DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(me32.hModule, "DSNewHandle");
             DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(me32.hModule, "DSSetHandleSize");
             DSDisposeHandleImpl = (DSDisposeHandle_T)GetProcAddress(me32.hModule, "DSDisposeHandle");
+
             result = grpc::StatusCode::OK; // success!
             break;
         } while (Module32Next(hModuleSnap, &me32));
@@ -212,20 +213,6 @@ namespace grpc_labview
     int32_t DeregisterCleanupProc(CleanupProcPtr cleanUpProc, gRPCid *id)
     {
         return RTSetCleanupProc(cleanUpProc, id, kCleanOnRemove);
-    }
-
-    //---------------------------------------------------------------------
-    //---------------------------------------------------------------------
-    void SetSharedLibraryName(const std::string &name)
-    {
-        SharedLibraryName = name;
-    }
-
-    //---------------------------------------------------------------------
-    //---------------------------------------------------------------------
-    std::string GetSharedLibraryName()
-    {
-        return SharedLibraryName;
     }
 
     int AlignClusterOffset(int clusterOffset, int alignmentRequirement)

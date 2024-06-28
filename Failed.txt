@@ -1,7 +1,0 @@
-[build]   =========================== short test summary info ===========================
-1] - 'AnyBuilderBegin', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-28] - 'CreateSerializationSession', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-42] - 'LVCreateParser', 'parameter_list': ['grpc_labview::LVProtoParser**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-43] - 'LVCreateServer', 'parameter_list': ['grpc_labview::gRPCid**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-59] - 'LVGetgRPCAPIVersion', 'parameter_list': ['int*', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
-60] - 'LVImportProto', 'parameter_list': ['const char*', 'const char*', 'grpc_labview::LVProtoParser**', 'grpc_labview::LVUserEventRef*'], 'return_type': 'int32_t'}
