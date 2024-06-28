@@ -50,7 +50,7 @@ namespace grpc_labview
     void InitCallbacks()
     {
 
-        if (NumericArrayResizeImp != nullptr)
+        if (NumericArrayResizeImp && PostLVUserEvent && Occur && RTSetCleanupProc && DSNewHandleImpl && DSSetHandleSizeImpl && DSDisposeHandleImpl)
         {
             // already loaded these functions
             return;
@@ -59,7 +59,6 @@ namespace grpc_labview
         // Search for a Module which Exports the LabVIEW Functions we are after
         HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
         MODULEENTRY32 me32;
-        HMODULE lvModule;
 
         //  Take a snapshot of all modules in the specified process.
         hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, GetCurrentProcessId());
@@ -79,30 +78,34 @@ namespace grpc_labview
             return;
         }
 
-        //  Loop through, looking for a Module that exports a specific function
+        //  Loop through, looking for a Module that exports the functions we are after
         do
         {
-            // check for a quite specific seeming LabVIEW.exe / LV-Runtime export
-            if (GetProcAddress(me32.hModule, "DSSetAlignedHandleSize"))
-            {
-                // found!
-                lvModule = me32.hModule;
-                break;
-            }
+            NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(me32.hModule, "NumericArrayResize");
+            if (!NumericArrayResizeImp)
+                continue;
+            PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(me32.hModule, "PostLVUserEvent");
+            if (!PostLVUserEvent)
+                continue;
+            Occur = (Occur_T)GetProcAddress(me32.hModule, "Occur");
+            if (!Occur)
+                continue;
+            RTSetCleanupProc = (RTSetCleanupProc_T)GetProcAddress(me32.hModule, "RTSetCleanupProc");
+            if (!RTSetCleanupProc)
+                continue;
+            DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(me32.hModule, "DSNewHandle");
+            if (!DSNewHandleImpl)
+                continue;
+            DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(me32.hModule, "DSSetHandleSize");
+            if (!DSSetHandleSizeImpl)
+                continue;
+            DSDisposeHandleImpl = (DSDisposeHandle_T)GetProcAddress(me32.hModule, "DSDisposeHandle");
+            if (!DSDisposeHandleImpl)
+                continue;
+            //break;
         } while (Module32Next(hModuleSnap, &me32));
 
         CloseHandle(hModuleSnap);
-
-        if (lvModule)
-        {
-            NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(lvModule, "NumericArrayResize");
-            PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(lvModule, "PostLVUserEvent");
-            Occur = (Occur_T)GetProcAddress(lvModule, "Occur");
-            RTSetCleanupProc = (RTSetCleanupProc_T)GetProcAddress(lvModule, "RTSetCleanupProc");
-            DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(lvModule, "DSNewHandle");
-            DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(lvModule, "DSSetHandleSize");
-            DSDisposeHandleImpl = (DSDisposeHandle_T)GetProcAddress(lvModule, "DSDisposeHandle");
-        }
     }
 
 #else
@@ -216,13 +219,15 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    void SetSharedLibraryName(const std::string& name){
+    void SetSharedLibraryName(const std::string &name)
+    {
         SharedLibraryName = name;
     }
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    std::string GetSharedLibraryName(){
+    std::string GetSharedLibraryName()
+    {
         return SharedLibraryName;
     }
 
@@ -240,3 +245,4 @@ namespace grpc_labview
 #endif
     }
 }
+

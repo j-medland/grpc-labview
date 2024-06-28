@@ -59,11 +59,17 @@ namespace grpc_labview
     typedef MagicCookie LVUserEventRef;
     typedef int32_t(*CleanupProcPtr)(gRPCid* id);
 
+    #ifdef _PS_4
+    #pragma pack (push, 1)
+    #endif
     struct LStr {
         int32_t cnt; /* number of bytes that follow */
         char str[1]; /* cnt bytes */
     };
-
+    #ifdef _PS_4
+    #pragma pack (pop)
+    #endif
+    
     using LStrPtr = LStr*;
     using LStrHandle =  LStr**;
 

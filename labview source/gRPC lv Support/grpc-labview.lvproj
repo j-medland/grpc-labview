@@ -4,7 +4,7 @@
 	<Property Name="NI.LV.All.SourceOnly" Type="Bool">true</Property>
 	<Property Name="NI.Project.Description" Type="Str"></Property>
 	<Item Name="My Computer" Type="My Computer">
-		<Property Name="CCSymbols" Type="Str">NI_GRPC_LV_SUPPORT_DEBUG,False;</Property>
+		<Property Name="CCSymbols" Type="Str">NI_GRPC_LV_SUPPORT_DEBUG,True;</Property>
 		<Property Name="server.app.propertiesEnabled" Type="Bool">true</Property>
 		<Property Name="server.control.propertiesEnabled" Type="Bool">true</Property>
 		<Property Name="server.tcp.enabled" Type="Bool">false</Property>
@@ -28,6 +28,7 @@
 			</Item>
 			<Item Name="labview_grpc_server.dll" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dll"/>
 			<Item Name="labview_grpc_server.dlls" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dlls"/>
+			<Item Name="lvrt.dll" Type="Document" URL="/&lt;nishared&gt;/LabVIEW Run-Time/2023/lvrt.dll"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build">
 			<Item Name="My Application" Type="EXE">
@@ -45,7 +46,7 @@
 				<Property Name="Bld_localDestDir" Type="Path">/C/serenial/oss/gpc</Property>
 				<Property Name="Bld_modifyLibraryFile" Type="Bool">true</Property>
 				<Property Name="Bld_previewCacheID" Type="Str">{41C4188C-552A-401F-B186-51FE70F11525}</Property>
-				<Property Name="Bld_version.build" Type="Int">1</Property>
+				<Property Name="Bld_version.build" Type="Int">2</Property>
 				<Property Name="Bld_version.major" Type="Int">1</Property>
 				<Property Name="Destination[0].destName" Type="Str">Application.exe</Property>
 				<Property Name="Destination[0].path" Type="Path">/C/serenial/oss/gpc/Application.exe</Property>
