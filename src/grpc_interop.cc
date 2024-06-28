@@ -523,6 +523,7 @@ LIBRARY_EXPORT void get_module_name(LStrArray **skip, grpc_labview::LVUserEventR
                 x(*ref, &list_len);
                 std::memcpy(&((*test)->str[0]), current.data(), std::min(static_cast<size_t>((*test)->cnt), current.length()));
                 (*test)->cnt = current.length();
+                break;
             }
         }
 
