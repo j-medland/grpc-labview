@@ -102,13 +102,13 @@
 		</Item>
 	</Item>
 	<Item Name="Shared" Type="Folder">
-		<Property Name="NI.SortType" Type="Int">1</Property>
+		<Property Name="NI.SortType" Type="Int">3</Property>
 		<Item Name="Any.ctl" Type="VI" URL="../Shared/Any.ctl"/>
-		<Item Name="Create InitCallback Acknowledgment.vi" Type="VI" URL="../Shared/Create InitCallback Acknowledgment.vi"/>
-		<Item Name="Create Occurance.vi" Type="VI" URL="../Shared/Create Occurance.vi"/>
 		<Item Name="grpcId.ctl" Type="VI" URL="../Shared/grpcId.ctl"/>
 		<Item Name="Is Feature Toggle Set.vi" Type="VI" URL="../Shared/Is Feature Toggle Set.vi"/>
 		<Item Name="TranslateGrpcError.vi" Type="VI" URL="../Shared/TranslateGrpcError.vi"/>
-		<Item Name="Wait On Occurrence_.vi" Type="VI" URL="../Shared/Wait On Occurrence_.vi"/>
+		<Item Name="Create Occurance.vi" Type="VI" URL="../Shared/Create Occurance.vi"/>
+		<Item Name="Create InitCallback Acknowledgment.vi" Type="VI" URL="../Shared/Create InitCallback Acknowledgment.vi"/>
+		<Item Name="Wait On Occurrence.vi" Type="VI" URL="../Shared/Wait On Occurrence.vi"/>
 	</Item>
 </Library>
