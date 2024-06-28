@@ -4,6 +4,8 @@
 #include <wtypes.h>
 #endif
 
+#include <lv_interop.h>
+
 namespace grpc_labview
 {
 #ifndef _WIN32
@@ -15,9 +17,9 @@ namespace grpc_labview
     LibHandle LockgRPCLibraryIntoProcessMem()
     {
 #if _WIN32
-        auto dllHandle = LoadLibrary(SharedLibraryName);
+        auto dllHandle = LoadLibrary(GetSharedLibraryName().c_str());
 #else
-        auto dllHandle = dlopen(SharedLibraryName, RTLD_LAZY);
+        auto dllHandle = dlopen(GetSharedLibraryName().c_str(), RTLD_LAZY);
 #endif
         return dllHandle;
     }

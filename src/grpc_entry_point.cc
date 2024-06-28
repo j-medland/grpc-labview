@@ -1,5 +1,6 @@
 #include <string>
 #include <whereami.h>
+#include <lv_interop.h>
 #include <feature_toggles.h>
 
 #if defined(__GNUC__) && !defined(_WIN32)
@@ -30,7 +31,7 @@ static void onSharedLibraryLoad()
 
     moduleDirectoryString = modulePathString.substr(0,dirnameLength);
 
-    SharedLibraryName = modulePathString.substr(dirnameLength+1);
+    grpc_labview::SetSharedLibraryName(modulePathString.substr(dirnameLength+1));
 
     grpc_labview::FeatureConfig::getInstance().readConfigFromFile(moduleDirectoryString + "/features_config.ini");
   }

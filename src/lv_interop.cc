@@ -21,7 +21,7 @@ static int kCleanOnIdle = 2;
 //---------------------------------------------------------------------
 typedef int (*NumericArrayResize_T)(int32_t, int32_t, void *handle, size_t size);
 typedef int (*PostLVUserEvent_T)(grpc_labview::LVUserEventRef ref, void *data);
-// typedef int (*Occur_T)(grpc_labview::MagicCookie occurrence);
+typedef int (*Occur_T)(grpc_labview::MagicCookie occurrence);
 typedef int32_t (*RTSetCleanupProc_T)(grpc_labview::CleanupProcPtr cleanUpProc, grpc_labview::gRPCid *id, int32_t mode);
 typedef unsigned char **(*DSNewHandlePtr_T)(size_t);
 typedef int (*DSSetHandleSize_T)(void *h, size_t);
@@ -31,10 +31,9 @@ typedef long (*DSDisposeHandle_T)(void *h);
 //---------------------------------------------------------------------
 static NumericArrayResize_T NumericArrayResizeImp = nullptr;
 static PostLVUserEvent_T PostLVUserEvent = nullptr;
-// static Occur_T Occur = nullptr;
+static Occur_T Occur = nullptr;
 static RTSetCleanupProc_T RTSetCleanupProc = nullptr;
 
-static std::string ModulePath = "";
 static std::string SharedLibraryName = "";
 static DSNewHandlePtr_T DSNewHandleImpl = nullptr;
 static DSSetHandleSize_T DSSetHandleSizeImpl = nullptr;
@@ -98,7 +97,7 @@ namespace grpc_labview
         {
             NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(lvModule, "NumericArrayResize");
             PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(lvModule, "PostLVUserEvent");
-            // Occur = (Occur_T)GetProcAddress(lvModule, "Occur");
+            Occur = (Occur_T)GetProcAddress(lvModule, "Occur");
             RTSetCleanupProc = (RTSetCleanupProc_T)GetProcAddress(lvModule, "RTSetCleanupProc");
             DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(lvModule, "DSNewHandle");
             DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(lvModule, "DSSetHandleSize");
@@ -213,6 +212,18 @@ namespace grpc_labview
     int32_t DeregisterCleanupProc(CleanupProcPtr cleanUpProc, gRPCid *id)
     {
         return RTSetCleanupProc(cleanUpProc, id, kCleanOnRemove);
+    }
+
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    void SetSharedLibraryName(const std::string& name){
+        SharedLibraryName = name;
+    }
+
+    //---------------------------------------------------------------------
+    //---------------------------------------------------------------------
+    std::string GetSharedLibraryName(){
+        return SharedLibraryName;
     }
 
     int AlignClusterOffset(int clusterOffset, int alignmentRequirement)
