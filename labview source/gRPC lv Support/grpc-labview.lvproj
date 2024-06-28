@@ -28,7 +28,6 @@
 			</Item>
 			<Item Name="labview_grpc_server.dll" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dll"/>
 			<Item Name="labview_grpc_server.dlls" Type="Document" URL="/&lt;resource&gt;/labview_grpc_server.dlls"/>
-			<Item Name="lvrt.dll" Type="Document" URL="/&lt;nishared&gt;/LabVIEW Run-Time/2023/lvrt.dll"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build">
 			<Item Name="My Application" Type="EXE">
