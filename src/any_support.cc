@@ -8,11 +8,11 @@
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t CreateSerializationSession(grpc_labview::gRPCid** sessionId, grpc_labview::LVUserEventRef *callbackInitAck)
+LIBRARY_EXPORT int32_t CreateSerializationSession( grpc_labview::LVUserEventRef *callbackInitAck, grpc_labview::gRPCid** sessionId)
 {
     auto result = grpc_labview::InitCallbacks(*callbackInitAck);
     if(result){
-        return 1000 - result;
+       return result;
     }
     auto session = new grpc_labview::LabVIEWSerializationSession();
     grpc_labview::gPointerManager.RegisterPointer(session);
@@ -146,11 +146,11 @@ LIBRARY_EXPORT int32_t IsAnyOfType(grpc_labview::gRPCid* id, grpc_labview::AnyCl
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t AnyBuilderBegin(grpc_labview::gRPCid** builderId, grpc_labview::LVUserEventRef *callbackInitAck)
+LIBRARY_EXPORT int32_t AnyBuilderBegin(grpc_labview::LVUserEventRef *callbackInitAck ,grpc_labview::gRPCid** builderId)
 {   
     auto result = grpc_labview::InitCallbacks(*callbackInitAck);
     if(result){
-        return 1000 - result;
+       return result;
     }
     auto metadata = std::make_shared<grpc_labview::MessageMetadata>();
     auto rootMessage = new grpc_labview::LVMessage(metadata);

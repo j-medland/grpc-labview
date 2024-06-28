@@ -181,7 +181,7 @@ namespace grpc_labview
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVGetgRPCAPIVersion(int* version, grpc_labview::LVUserEventRef *callbackInitAck)
+LIBRARY_EXPORT int32_t LVGetgRPCAPIVersion(grpc_labview::LVUserEventRef *callbackInitAck, int* version)
 {
     *version = 2;
     return grpc_labview::InitCallbacks(*callbackInitAck);;    
@@ -189,7 +189,7 @@ LIBRARY_EXPORT int32_t LVGetgRPCAPIVersion(int* version, grpc_labview::LVUserEve
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVCreateParser(grpc_labview::LVProtoParser** parser, grpc_labview::LVUserEventRef *callbackInitAck)
+LIBRARY_EXPORT int32_t LVCreateParser(grpc_labview::LVUserEventRef *callbackInitAck, grpc_labview::LVProtoParser** parser)
 {
     auto result = grpc_labview::InitCallbacks(*callbackInitAck);
     if(result){
@@ -226,7 +226,7 @@ LIBRARY_EXPORT int32_t LVImportProto2(grpc_labview::LVProtoParser* parser, const
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVImportProto(const char* filePath, const char* searchPath, grpc_labview::LVProtoParser** parser, grpc_labview::LVUserEventRef *callbackInitAck)
+LIBRARY_EXPORT int32_t LVImportProto( grpc_labview::LVUserEventRef *callbackInitAck, const char* filePath, const char* searchPath, grpc_labview::LVProtoParser** parser)
 {
     auto result = grpc_labview::InitCallbacks(*callbackInitAck);
     if(result){

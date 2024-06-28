@@ -104,7 +104,6 @@
 	<Item Name="Shared" Type="Folder">
 		<Property Name="NI.SortType" Type="Int">1</Property>
 		<Item Name="Any.ctl" Type="VI" URL="../Shared/Any.ctl"/>
-		<Item Name="Check InitCallback Acknowledgement.vi" Type="VI" URL="../Shared/Check InitCallback Acknowledgement.vi"/>
 		<Item Name="Create InitCallback Acknowledgment.vi" Type="VI" URL="../Shared/Create InitCallback Acknowledgment.vi"/>
 		<Item Name="Create Occurance.vi" Type="VI" URL="../Shared/Create Occurance.vi"/>
 		<Item Name="grpcId.ctl" Type="VI" URL="../Shared/grpcId.ctl"/>
