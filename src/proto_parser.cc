@@ -228,7 +228,7 @@ LIBRARY_EXPORT int LVImportProto2(grpc_labview::LVProtoParser* parser, const cha
 //---------------------------------------------------------------------
 LIBRARY_EXPORT int LVImportProto(const char* filePath, const char* searchPath, grpc_labview::LVProtoParser** parser, grpc_labview::LVUserEventRef *callbackInitAck)
 {
-    grpc_labview::InitCallbacks(grpc_labview::LVUserEventRef *callbackInitAck);
+    grpc_labview::InitCallbacks(*callbackInitAck);
 
     *parser = new grpc_labview::LVProtoParser();
     (*parser)->Import(filePath, searchPath);

@@ -18,7 +18,8 @@
       "function_name": "AnyBuilderBegin",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
@@ -279,7 +280,8 @@
       "parameter_list": [
         "const char*",
         "const char*",
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
@@ -295,7 +297,8 @@
       "function_name": "CreateSerializationSession",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
@@ -427,7 +430,8 @@
       "function_name": "LVCreateParser",
       "return_type": "int",
       "parameter_list": [
-        "grpc_labview::LVProtoParser**"
+        "grpc_labview::LVProtoParser**",
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
@@ -435,7 +439,8 @@
       "function_name": "LVCreateServer",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
@@ -579,7 +584,8 @@
       "function_name": "LVGetgRPCAPIVersion",
       "return_type": "int",
       "parameter_list": [
-        "int*"
+        "int*",
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
@@ -589,7 +595,8 @@
       "parameter_list": [
         "const char*",
         "const char*",
-        "grpc_labview::LVProtoParser**"
+        "grpc_labview::LVProtoParser**",
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
