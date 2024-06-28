@@ -197,7 +197,10 @@ LIBRARY_EXPORT void IsFeatureToggleSet(const char *filePath, uint8_t *isSet)
 //---------------------------------------------------------------------
 LIBRARY_EXPORT int32_t LVCreateServer(grpc_labview::gRPCid **id, grpc_labview::LVUserEventRef *callbackInitAck)
 {
-    grpc_labview::InitCallbacks(*callbackInitAck);
+    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    if(result){
+        return 1000 - result;
+    }
     auto server = new grpc_labview::LabVIEWgRPCServer();
     grpc_labview::gPointerManager.RegisterPointer(server);
     *id = server;

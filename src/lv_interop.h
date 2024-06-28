@@ -62,13 +62,11 @@ namespace grpc_labview
     #ifdef _PS_4
     #pragma pack (push, 1)
     #endif
+    
     struct LStr {
         int32_t cnt; /* number of bytes that follow */
         char str[1]; /* cnt bytes */
     };
-    #ifdef _PS_4
-    #pragma pack (pop)
-    #endif
     
     using LStrPtr = LStr*;
     using LStrHandle =  LStr**;
@@ -102,21 +100,19 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    #ifdef _PS_4
-    #pragma pack (push, 1)
-    #endif
     struct AnyCluster
     {    
         LStrHandle TypeUrl;
         LV1DArrayHandle Bytes;
     };
+
     #ifdef _PS_4
     #pragma pack (pop)
     #endif
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-	void InitCallbacks(LVUserEventRef);
+	int32_t InitCallbacks(LVUserEventRef);
     void SetLVString(LStrHandle* lvString, const std::string &str);
     std::string GetLVString(LStrHandle lvString);
     int NumericArrayResize(int32_t typeCode, int32_t numDims, void* handle, size_t size);

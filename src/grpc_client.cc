@@ -174,8 +174,10 @@ void CheckActiveAndSignalOccurenceForClientCall(grpc_labview::ClientCall *client
 //---------------------------------------------------------------------
 LIBRARY_EXPORT int32_t CreateClient(const char *address, const char *certificatePath, grpc_labview::gRPCid **clientId, grpc_labview::LVUserEventRef *callbackInitAck)
 {
-    grpc_labview::InitCallbacks(*callbackInitAck);
-
+    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    if(result){
+        return result;
+    }
     auto client = new grpc_labview::LabVIEWgRPCClient();
     client->Connect(address, certificatePath);
     *clientId = grpc_labview::gPointerManager.RegisterPointer(client);

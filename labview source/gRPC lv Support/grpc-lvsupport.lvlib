@@ -105,13 +105,11 @@
 		<Property Name="NI.SortType" Type="Int">1</Property>
 		<Item Name="Any.ctl" Type="VI" URL="../Shared/Any.ctl"/>
 		<Item Name="Check InitCallback Acknowledgement.vi" Type="VI" URL="../Shared/Check InitCallback Acknowledgement.vi"/>
+		<Item Name="Create InitCallback Acknowledgment.vi" Type="VI" URL="../Shared/Create InitCallback Acknowledgment.vi"/>
 		<Item Name="Create Occurance.vi" Type="VI" URL="../Shared/Create Occurance.vi"/>
 		<Item Name="grpcId.ctl" Type="VI" URL="../Shared/grpcId.ctl"/>
-		<Item Name="Initialize InitCallback Acknowledgment User Event.vi" Type="VI" URL="../Shared/Initialize InitCallback Acknowledgment User Event.vi"/>
 		<Item Name="Is Feature Toggle Set.vi" Type="VI" URL="../Shared/Is Feature Toggle Set.vi"/>
-		<Item Name="Set LVRT Module Path.vi" Type="VI" URL="../Shared/Set LVRT Module Path.vi"/>
 		<Item Name="TranslateGrpcError.vi" Type="VI" URL="../Shared/TranslateGrpcError.vi"/>
-		<Item Name="Wait On Occurence.vi" Type="VI" URL="../Shared/Wait On Occurence.vi"/>
-		<Item Name="Wait On Occurrence Wrapper.vi" Type="VI" URL="../Shared/Wait On Occurrence Wrapper.vi"/>
+		<Item Name="Wait On Occurrence_.vi" Type="VI" URL="../Shared/Wait On Occurrence_.vi"/>
 	</Item>
 </Library>
