@@ -114,6 +114,9 @@ target_link_libraries(labview_grpc_server
 
 if(MSVC)
   target_compile_definitions(labview_grpc_server PRIVATE _PS_${CMAKE_SIZEOF_VOID_P})
+elseif(UNIX)
+  # don't add the "lib" prefix to unix binaries
+  set_target_properties(labview_grpc_server PROPERTIES PREFIX "")
 endif()
 
 # ----------------------------------------------------------------------
@@ -121,20 +124,25 @@ endif()
 # server VIs from a .proto file
 # ----------------------------------------------------------------------
 add_library(labview_grpc_generator SHARED
-  src/feature_toggles.cc
+  #src/feature_toggles.cc
   src/lv_interop.cc
   src/proto_parser.cc
-  src/grpc_entry_point.cc
 )
 target_link_libraries(labview_grpc_generator
   PRIVATE
-  whereami
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
+
+set_target_properties(labview_grpc_generator PROPERTIES OUTPUT_NAME labview_grpc_generator${_BITNESS})
+
+
 if(MSVC)
   target_compile_definitions(labview_grpc_generator PRIVATE _PS_${CMAKE_SIZEOF_VOID_P})
+  elseif(UNIX)
+  # don't add the "lib" prefix to unix binaries
+  set_target_properties(labview_grpc_generator PROPERTIES PREFIX "")
 endif()
 
 # ######################################################################
@@ -240,9 +248,16 @@ add_dependencies(example_client Detect_Compatibility_Breaks)
 # ----------------------------------------------------------------------
 # Add a labview-src local install directory for easier dll development/debugging
 # ----------------------------------------------------------------------
-SET(_LABVIEW_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/labview source/${_BITNESS}-bit")
-install(TARGETS labview_grpc_server labview_grpc_generator
+SET(_LABVIEW_DEBUG_BINARY_DIR "${CMAKE_CURRENT_LIST_DIR}/labview source/${_BITNESS}-bit")
+install(TARGETS labview_grpc_server
     COMPONENT ${PROJECT_NAME}
-    RUNTIME DESTINATION ${_LABVIEW_SOURCE_DIR}
-    LIBRARY DESTINATION ${_LABVIEW_SOURCE_DIR}
+    RUNTIME DESTINATION ${_LABVIEW_DEBUG_BINARY_DIR}
+    LIBRARY DESTINATION ${_LABVIEW_DEBUG_BINARY_DIR}
+)
+
+SET(_LABVIEW_GENERATOR_DIR "${CMAKE_CURRENT_LIST_DIR}/labview source/Client Server Support New/gRPC Scripting Tools")
+install(TARGETS labview_grpc_generator
+    COMPONENT ${PROJECT_NAME}
+    RUNTIME DESTINATION ${_LABVIEW_GENERATOR_DIR}
+    LIBRARY DESTINATION ${_LABVIEW_GENERATOR_DIR}
 )

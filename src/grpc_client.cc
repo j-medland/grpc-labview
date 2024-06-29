@@ -172,9 +172,9 @@ void CheckActiveAndSignalOccurenceForClientCall(grpc_labview::ClientCall *client
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t CreateClient( grpc_labview::LVUserEventRef *callbackInitAck, const char *address, const char *certificatePath, grpc_labview::gRPCid **clientId)
+LIBRARY_EXPORT int32_t CreateClient(const char *address, const char *certificatePath, grpc_labview::gRPCid **clientId, grpc_labview::MagicCookie* occurrence)
 {
-    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    auto result = grpc_labview::InitCallbacks(*occurrence);
     if(result){
         return 1000-result;
     }

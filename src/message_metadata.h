@@ -20,7 +20,7 @@ namespace grpc_labview
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     // Enum equivalent to this on the LabVIEW side: Message Element Type.ctl
-    enum class LVMessageMetadataType
+    enum class LVMessageMetadataType : uint32_t
     {
         Int32Value = 0,
         FloatValue = 1,

@@ -171,7 +171,7 @@ LIBRARY_EXPORT int32_t UnpackFieldsFromAny(grpc_labview::AnyCluster* anyCluster,
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t GetUnpackedField(grpc_labview::gRPCid* id, int protobufIndex, grpc_labview::LVMessageMetadataType valueType, int isRepeated, int8_t* buffer)
+LIBRARY_EXPORT int32_t GetUnpackedField(grpc_labview::gRPCid* id, int32_t protobufIndex, grpc_labview::LVMessageMetadataType valueType, int32_t isRepeated, int8_t* buffer)
 {
     if (id == nullptr)
     {
@@ -184,7 +184,7 @@ LIBRARY_EXPORT int32_t GetUnpackedField(grpc_labview::gRPCid* id, int protobufIn
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t GetUnpackedMessageField(grpc_labview::gRPCid* id, int protobufIndex, int8_t* buffer)
+LIBRARY_EXPORT int32_t GetUnpackedMessageField(grpc_labview::gRPCid* id, int32_t protobufIndex, int8_t* buffer)
 {    
     return -1; 
 }

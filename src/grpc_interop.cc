@@ -195,9 +195,9 @@ LIBRARY_EXPORT void IsFeatureToggleSet(const char *filePath, uint8_t *isSet)
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVCreateServer(grpc_labview::LVUserEventRef *callbackInitAck, grpc_labview::gRPCid **id)
+LIBRARY_EXPORT int32_t LVCreateServer(grpc_labview::gRPCid **id, grpc_labview::MagicCookie* occurrence)
 {
-    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    auto result = grpc_labview::InitCallbacks(*occurrence);
     if(result){
         return result;
     }
@@ -298,7 +298,7 @@ LIBRARY_EXPORT int32_t RegisterEnumMetadata2(grpc_labview::gRPCid **id, grpc_lab
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT uint32_t GetLVEnumValueFromProtoValue(grpc_labview::gRPCid **id, const char *enumName, int protoValue, uint32_t *lvEnumValue)
+LIBRARY_EXPORT uint32_t GetLVEnumValueFromProtoValue(grpc_labview::gRPCid **id, const char *enumName, int32_t protoValue, uint32_t *lvEnumValue)
 {
     auto server = (*id)->CastTo<grpc_labview::MessageElementMetadataOwner>();
     if (server == nullptr)
@@ -306,14 +306,14 @@ LIBRARY_EXPORT uint32_t GetLVEnumValueFromProtoValue(grpc_labview::gRPCid **id, 
         return -1;
     }
     auto metadata = (server.get())->FindEnumMetadata(std::string(enumName));
-    *(uint32_t *)lvEnumValue = metadata.get()->GetLVEnumValueFromProtoValue(protoValue);
+    *lvEnumValue = metadata.get()->GetLVEnumValueFromProtoValue(protoValue);
 
     return 0;
 }
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t GetProtoValueFromLVEnumValue(grpc_labview::gRPCid **id, const char *enumName, int lvEnumValue, int32_t *protoValue)
+LIBRARY_EXPORT int32_t GetProtoValueFromLVEnumValue(grpc_labview::gRPCid **id, const char *enumName, uint32_t lvEnumValue, int32_t *protoValue)
 {
     auto server = (*id)->CastTo<grpc_labview::MessageElementMetadataOwner>();
     if (server == nullptr)
@@ -321,7 +321,7 @@ LIBRARY_EXPORT int32_t GetProtoValueFromLVEnumValue(grpc_labview::gRPCid **id, c
         return -1;
     }
     auto metadata = (server.get())->FindEnumMetadata(std::string(enumName));
-    *(int32_t *)protoValue = metadata.get()->GetProtoValueFromLVEnumValue(lvEnumValue);
+    *protoValue = metadata.get()->GetProtoValueFromLVEnumValue(lvEnumValue);
 
     return 0;
 }
@@ -443,14 +443,14 @@ LIBRARY_EXPORT int32_t CloseServerEvent(grpc_labview::gRPCid **id)
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t SetCallStatus(grpc_labview::gRPCid **id, int grpcErrorCode, const char *errorMessage)
+LIBRARY_EXPORT int32_t SetCallStatus(grpc_labview::gRPCid **id, uint16_t grpcErrorCode, const char *errorMessage)
 {
     auto data = (*id)->CastTo<grpc_labview::GenericMethodData>();
     if (data == nullptr)
     {
         return -1;
     }
-    data->_call->SetCallStatusError((grpc::StatusCode)grpcErrorCode, errorMessage);
+    data->_call->SetCallStatusError(static_cast<grpc::StatusCode>(grpcErrorCode), errorMessage);
     return 0;
 }
 

@@ -33,7 +33,6 @@ static NumericArrayResize_T NumericArrayResizeImp = nullptr;
 static PostLVUserEvent_T PostLVUserEvent = nullptr;
 static Occur_T Occur = nullptr;
 static RTSetCleanupProc_T RTSetCleanupProc = nullptr;
-
 static DSNewHandlePtr_T DSNewHandleImpl = nullptr;
 static DSSetHandleSize_T DSSetHandleSizeImpl = nullptr;
 static DSDisposeHandle_T DSDisposeHandleImpl = nullptr;
@@ -46,14 +45,14 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    int32_t InitCallbacks(LVUserEventRef callbacksInitializedEvent)
+    int32_t InitCallbacks(grpc_labview::MagicCookie occurrence)
     {
         if (PostLVUserEvent)
         {
             return grpc::StatusCode::OK;
         }
 
-        int32_t result {-1000 - grpc::StatusCode::INTERNAL}; // non-zero = failed
+        int32_t result{-1000 - grpc::StatusCode::INTERNAL}; // non-zero = failed
 
         // Search for a Module which Exports the LabVIEW Functions we are after
         HANDLE hModuleSnap = INVALID_HANDLE_VALUE;
@@ -79,17 +78,17 @@ namespace grpc_labview
 
         //  Loop through, looking for a Module that exports the functions we are after
         do
-        {   
-            uint8_t dummyData;
-            PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(me32.hModule, "PostLVUserEvent");
-            // validate that this module is in the correct context by trying to generate a user event
-            // PostLVUserEvent returns non-zero value on failure
-            if (!PostLVUserEvent || PostLVUserEvent(callbacksInitializedEvent, &dummyData)){
+        {
+            Occur = (Occur_T)GetProcAddress(me32.hModule, "Occur");
+            // validate that this module is in the correct context by trying to fire the occurance
+            // Occur returns non-zero value on failure
+            if (Occur == nullptr || Occur(occurrence) != 0)
+            {
                 // skip this iteration and keep looping
                 continue;
             }
+            PostLVUserEvent = (PostLVUserEvent_T)GetProcAddress(me32.hModule, "PostLVUserEvent");
             NumericArrayResizeImp = (NumericArrayResize_T)GetProcAddress(me32.hModule, "NumericArrayResize");
-            Occur = (Occur_T)GetProcAddress(me32.hModule, "Occur");
             RTSetCleanupProc = (RTSetCleanupProc_T)GetProcAddress(me32.hModule, "RTSetCleanupProc");
             DSNewHandleImpl = (DSNewHandlePtr_T)GetProcAddress(me32.hModule, "DSNewHandle");
             DSSetHandleSizeImpl = (DSSetHandleSize_T)GetProcAddress(me32.hModule, "DSSetHandleSize");
@@ -108,7 +107,7 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    int32_t InitCallbacks(LVUserEventRef callbacksInitializedEvent)
+    int32_t InitCallbacks(grpc_labview::MagicCookie occurrence)
     {
         if (NumericArrayResizeImp != nullptr)
         {
@@ -119,11 +118,17 @@ namespace grpc_labview
         PostLVUserEvent = (PostLVUserEvent_T)dlsym(RTLD_DEFAULT, "PostLVUserEvent");
         Occur = (Occur_T)dlsym(RTLD_DEFAULT, "Occur");
         RTSetCleanupProc = (RTSetCleanupProc_T)dlsym(RTLD_DEFAULT, "RTSetCleanupProc");
+        DSNewHandleImpl = (DSNewHandlePtr_T)dlsym(RTLD_DEFAULT, "DSNewHandle");
+        DSSetHandleSizeImpl = (DSSetHandleSize_T)dlsym(RTLD_DEFAULT, "DSSetHandleSize");
+        DSDisposeHandleImpl = (DSDisposeHandle_T)dlsym(RTLD_DEFAULT, "DSDisposeHandle");
 
         if (NumericArrayResizeImp == nullptr ||
             PostLVUserEvent == nullptr ||
             Occur == nullptr ||
-            RTSetCleanupProc == nullptr)
+            RTSetCleanupProc == nullptr ||
+            DSNewHandleImpl == nullptr ||
+            DSSetHandleSizeImpl == nullptr ||
+            DSDisposeHandleImpl == nullptr)
         {
             return -1000 - grpc::StatusCode::INTERNAL;
         }
@@ -229,4 +234,3 @@ namespace grpc_labview
 #endif
     }
 }
-

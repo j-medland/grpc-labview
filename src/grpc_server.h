@@ -175,7 +175,7 @@ namespace grpc_labview
 
         bool _requestDataReady;
 
-        enum class CallStatus
+        enum class CallStatus : uint32_t
         {
             Create,
             Read,

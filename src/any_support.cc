@@ -8,9 +8,9 @@
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t CreateSerializationSession( grpc_labview::LVUserEventRef *callbackInitAck, grpc_labview::gRPCid** sessionId)
+LIBRARY_EXPORT int32_t CreateSerializationSession(grpc_labview::gRPCid** sessionId, grpc_labview::MagicCookie* occurrence)
 {
-    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    auto result = grpc_labview::InitCallbacks(*occurrence);
     if(result){
        return result;
     }
@@ -146,9 +146,9 @@ LIBRARY_EXPORT int32_t IsAnyOfType(grpc_labview::gRPCid* id, grpc_labview::AnyCl
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t AnyBuilderBegin(grpc_labview::LVUserEventRef *callbackInitAck ,grpc_labview::gRPCid** builderId)
+LIBRARY_EXPORT int32_t AnyBuilderBegin(grpc_labview::gRPCid** builderId, grpc_labview::MagicCookie* occurrence)
 {   
-    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    auto result = grpc_labview::InitCallbacks(*occurrence);
     if(result){
        return result;
     }
@@ -161,7 +161,7 @@ LIBRARY_EXPORT int32_t AnyBuilderBegin(grpc_labview::LVUserEventRef *callbackIni
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t AnyBuilderAddValue(grpc_labview::gRPCid* anyId, grpc_labview::LVMessageMetadataType valueType, int isRepeated, int protobufIndex, int8_t* value)
+LIBRARY_EXPORT int32_t AnyBuilderAddValue(grpc_labview::gRPCid* anyId, grpc_labview::LVMessageMetadataType valueType, int32_t isRepeated, int32_t protobufIndex, int8_t* value)
 {
     auto message = anyId->CastTo<grpc_labview::LVMessage>();
     try
@@ -177,7 +177,7 @@ LIBRARY_EXPORT int32_t AnyBuilderAddValue(grpc_labview::gRPCid* anyId, grpc_labv
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t AnyBuilderBeginNestedMessage(grpc_labview::gRPCid* builderId, int protobufIndex, grpc_labview::gRPCid** nestedId)
+LIBRARY_EXPORT int32_t AnyBuilderBeginNestedMessage(grpc_labview::gRPCid* builderId, int32_t protobufIndex, grpc_labview::gRPCid** nestedId)
 {   
     auto message = builderId->CastTo<grpc_labview::LVMessage>();
     auto metadata = std::make_shared<grpc_labview::MessageMetadata>();
@@ -191,7 +191,7 @@ LIBRARY_EXPORT int32_t AnyBuilderBeginNestedMessage(grpc_labview::gRPCid* builde
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t AnyBuilderBeginRepeatedNestedMessage(grpc_labview::gRPCid* builderId, int protobufIndex, grpc_labview::gRPCid** nestedId)
+LIBRARY_EXPORT int32_t AnyBuilderBeginRepeatedNestedMessage(grpc_labview::gRPCid* builderId, int32_t protobufIndex, grpc_labview::gRPCid** nestedId)
 {   
     auto message = builderId->CastTo<grpc_labview::LVMessage>();
     auto metadata = std::make_shared<grpc_labview::MessageMetadata>();

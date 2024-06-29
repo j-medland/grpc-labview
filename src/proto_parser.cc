@@ -181,17 +181,17 @@ namespace grpc_labview
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVGetgRPCAPIVersion(grpc_labview::LVUserEventRef *callbackInitAck, int* version)
+LIBRARY_EXPORT int32_t LVGetgRPCAPIVersion(int* version, grpc_labview::MagicCookie *callbackInitOccurrence)
 {
     *version = 2;
-    return grpc_labview::InitCallbacks(*callbackInitAck);;    
+    return grpc_labview::InitCallbacks(*callbackInitOccurrence);    
 }
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVCreateParser(grpc_labview::LVUserEventRef *callbackInitAck, grpc_labview::LVProtoParser** parser)
+LIBRARY_EXPORT int32_t LVCreateParser(grpc_labview::LVProtoParser** parser, grpc_labview::MagicCookie *callbackInitOccurrence)
 {
-    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    auto result = grpc_labview::InitCallbacks(*callbackInitOccurrence);
     if(result){
         return result;
     }
@@ -226,9 +226,9 @@ LIBRARY_EXPORT int32_t LVImportProto2(grpc_labview::LVProtoParser* parser, const
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t LVImportProto( grpc_labview::LVUserEventRef *callbackInitAck, const char* filePath, const char* searchPath, grpc_labview::LVProtoParser** parser)
+LIBRARY_EXPORT int32_t LVImportProto(const char* filePath, const char* searchPath, grpc_labview::LVProtoParser** parser, grpc_labview::MagicCookie *callbackInitOccurrence)
 {
-    auto result = grpc_labview::InitCallbacks(*callbackInitAck);
+    auto result = grpc_labview::InitCallbacks(*callbackInitOccurrence);
     if(result){
         return result;
     }

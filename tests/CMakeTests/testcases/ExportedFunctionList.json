@@ -8,8 +8,8 @@
       "parameter_list": [
         "grpc_labview::gRPCid*",
         "grpc_labview::LVMessageMetadataType",
-        "int",
-        "int",
+        "int32_t",
+        "int32_t",
         "int8_t*"
       ]
     },
@@ -19,7 +19,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid**",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -28,7 +28,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "grpc_labview::gRPCid**"
       ]
     },
@@ -38,7 +38,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "grpc_labview::gRPCid**"
       ]
     },
@@ -278,10 +278,10 @@
       "function_name": "CreateClient",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::LVUserEventRef*",
         "const char*",
         "const char*",
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -298,7 +298,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid**",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -352,7 +352,7 @@
       "parameter_list": [
         "grpc_labview::gRPCid**",
         "const char*",
-        "int",
+        "int32_t",
         "uint32_t*"
       ]
     },
@@ -363,7 +363,7 @@
       "parameter_list": [
         "grpc_labview::gRPCid**",
         "const char*",
-        "int",
+        "uint32_t",
         "int32_t*"
       ]
     },
@@ -382,9 +382,9 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "grpc_labview::LVMessageMetadataType",
-        "int",
+        "int32_t",
         "int8_t*"
       ]
     },
@@ -394,7 +394,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "int8_t*"
       ]
     },
@@ -431,7 +431,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser**",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -440,7 +440,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid**",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -585,7 +585,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "int*",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -596,7 +596,7 @@
         "const char*",
         "const char*",
         "grpc_labview::LVProtoParser**",
-        "grpc_labview::LVUserEventRef*"
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -758,7 +758,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid**",
-        "int",
+        "uint16_t",
         "const char*"
       ]
     },
