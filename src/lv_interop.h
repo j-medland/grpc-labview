@@ -7,6 +7,7 @@
 #ifdef _WIN32
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
+#include <tlhelp32.h> 
 #endif
 
 //---------------------------------------------------------------------
@@ -58,11 +59,15 @@ namespace grpc_labview
     typedef MagicCookie LVUserEventRef;
     typedef int32_t(*CleanupProcPtr)(gRPCid* id);
 
+    #ifdef _PS_4
+    #pragma pack (push, 1)
+    #endif
+    
     struct LStr {
         int32_t cnt; /* number of bytes that follow */
         char str[1]; /* cnt bytes */
     };
-
+    
     using LStrPtr = LStr*;
     using LStrHandle =  LStr**;
 
@@ -95,22 +100,19 @@ namespace grpc_labview
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    #ifdef _PS_4
-    #pragma pack (push, 1)
-    #endif
     struct AnyCluster
     {    
         LStrHandle TypeUrl;
         LV1DArrayHandle Bytes;
     };
+
     #ifdef _PS_4
     #pragma pack (pop)
     #endif
 
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
-    void SetLVRTModulePath(std::string modulePath);
-	void InitCallbacks();
+	int32_t InitCallbacks(grpc_labview::MagicCookie);
     void SetLVString(LStrHandle* lvString, const std::string &str);
     std::string GetLVString(LStrHandle lvString);
     int NumericArrayResize(int32_t typeCode, int32_t numDims, void* handle, size_t size);

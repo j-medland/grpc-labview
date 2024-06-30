@@ -8,8 +8,8 @@
       "parameter_list": [
         "grpc_labview::gRPCid*",
         "grpc_labview::LVMessageMetadataType",
-        "int",
-        "int",
+        "int32_t",
+        "int32_t",
         "int8_t*"
       ]
     },
@@ -18,7 +18,8 @@
       "function_name": "AnyBuilderBegin",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -27,7 +28,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "grpc_labview::gRPCid**"
       ]
     },
@@ -37,7 +38,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "grpc_labview::gRPCid**"
       ]
     },
@@ -104,7 +105,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "grpc_labview::MagicCookie*"
+        "grpc_labview::LVUserEventRef*"
       ]
     },
     {
@@ -145,8 +146,8 @@
       "function_name": "ClientCompleteClientStreamingCall",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid*",
-        "grpc_labview::MagicCookie*"
+        "grpc_labview::LVUserEventRef*",
+        "grpc_labview::gRPCid*"
       ]
     },
     {
@@ -174,8 +175,8 @@
       "function_name": "ClientUnaryCall",
       "return_type": "int32_t",
       "parameter_list": [
+        "grpc_labview::LVUserEventRef*",
         "grpc_labview::gRPCid*",
-        "grpc_labview::MagicCookie*",
         "const char*",
         "const char*",
         "const char*",
@@ -190,8 +191,8 @@
       "function_name": "ClientUnaryCall2",
       "return_type": "int32_t",
       "parameter_list": [
+        "grpc_labview::LVUserEventRef*",
         "grpc_labview::gRPCid*",
-        "grpc_labview::MagicCookie*",
         "const char*",
         "const char*",
         "const char*",
@@ -279,7 +280,8 @@
       "parameter_list": [
         "const char*",
         "const char*",
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -295,7 +297,8 @@
       "function_name": "CreateSerializationSession",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -336,7 +339,7 @@
     {
       "id": 33,
       "function_name": "GetEnumInfo",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "EnumDescriptor*",
         "grpc_labview::EnumFieldCluster*"
@@ -349,7 +352,7 @@
       "parameter_list": [
         "grpc_labview::gRPCid**",
         "const char*",
-        "int",
+        "int32_t",
         "uint32_t*"
       ]
     },
@@ -360,7 +363,7 @@
       "parameter_list": [
         "grpc_labview::gRPCid**",
         "const char*",
-        "int",
+        "uint32_t",
         "int32_t*"
       ]
     },
@@ -379,9 +382,9 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "grpc_labview::LVMessageMetadataType",
-        "int",
+        "int32_t",
         "int8_t*"
       ]
     },
@@ -391,7 +394,7 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid*",
-        "int",
+        "int32_t",
         "int8_t*"
       ]
     },
@@ -416,7 +419,7 @@
     {
       "id": 41,
       "function_name": "LVAddParserSearchPath",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "const char*"
@@ -425,9 +428,10 @@
     {
       "id": 42,
       "function_name": "LVCreateParser",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::LVProtoParser**"
+        "grpc_labview::LVProtoParser**",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
@@ -435,13 +439,14 @@
       "function_name": "LVCreateServer",
       "return_type": "int32_t",
       "parameter_list": [
-        "grpc_labview::gRPCid**"
+        "grpc_labview::gRPCid**",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
       "id": 44,
       "function_name": "LVEnumName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "EnumDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -450,7 +455,7 @@
     {
       "id": 45,
       "function_name": "LVEnumTypeUrl",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "EnumDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -459,7 +464,7 @@
     {
       "id": 46,
       "function_name": "LVFieldInfo",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "FieldDescriptor*",
         "grpc_labview::MessageFieldCluster*"
@@ -468,7 +473,7 @@
     {
       "id": 47,
       "function_name": "LVGetEnums",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LV1DArrayHandle*",
@@ -478,7 +483,7 @@
     {
       "id": 48,
       "function_name": "LVGetErrorString",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LStrHandle*"
@@ -487,7 +492,7 @@
     {
       "id": 49,
       "function_name": "LVGetFields",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "grpc_labview::LV1DArrayHandle*"
@@ -496,7 +501,7 @@
     {
       "id": 50,
       "function_name": "LVGetMessages",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LV1DArrayHandle*"
@@ -505,7 +510,7 @@
     {
       "id": 51,
       "function_name": "LVGetMethodFullName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -514,7 +519,7 @@
     {
       "id": 52,
       "function_name": "LVGetMethodInput",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "const Descriptor**"
@@ -523,7 +528,7 @@
     {
       "id": 53,
       "function_name": "LVGetMethodName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -532,7 +537,7 @@
     {
       "id": 54,
       "function_name": "LVGetMethodOutput",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "const Descriptor**"
@@ -550,7 +555,7 @@
     {
       "id": 56,
       "function_name": "LVGetServiceMethods",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "ServiceDescriptor*",
         "grpc_labview::LV1DArrayHandle*"
@@ -559,7 +564,7 @@
     {
       "id": 57,
       "function_name": "LVGetServiceName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "ServiceDescriptor*",
         "grpc_labview::LStrHandle*"
@@ -568,7 +573,7 @@
     {
       "id": 58,
       "function_name": "LVGetServices",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "grpc_labview::LV1DArrayHandle*"
@@ -577,25 +582,27 @@
     {
       "id": 59,
       "function_name": "LVGetgRPCAPIVersion",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
-        "int*"
+        "int*",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
       "id": 60,
       "function_name": "LVImportProto",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "const char*",
         "const char*",
-        "grpc_labview::LVProtoParser**"
+        "grpc_labview::LVProtoParser**",
+        "grpc_labview::MagicCookie*"
       ]
     },
     {
       "id": 61,
       "function_name": "LVImportProto2",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::LVProtoParser*",
         "const char*",
@@ -605,7 +612,7 @@
     {
       "id": 62,
       "function_name": "LVIsMethodClientStreaming",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "int*"
@@ -614,7 +621,7 @@
     {
       "id": 63,
       "function_name": "LVIsMethodServerStreaming",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "MethodDescriptor*",
         "int*"
@@ -623,7 +630,7 @@
     {
       "id": 64,
       "function_name": "LVMessageHasOneof",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "int*"
@@ -632,7 +639,7 @@
     {
       "id": 65,
       "function_name": "LVMessageName",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "grpc_labview::LStrHandle*"
@@ -641,7 +648,7 @@
     {
       "id": 66,
       "function_name": "LVMessageTypeUrl",
-      "return_type": "int",
+      "return_type": "int32_t",
       "parameter_list": [
         "Descriptor*",
         "grpc_labview::LStrHandle*"
@@ -751,16 +758,17 @@
       "return_type": "int32_t",
       "parameter_list": [
         "grpc_labview::gRPCid**",
-        "int",
+        "uint16_t",
         "const char*"
       ]
     },
     {
       "id": 78,
-      "function_name": "SetLVRTModulePath",
-      "return_type": "int32_t",
+      "function_name": "IsFeatureToggleSet",
+      "return_type": "void",
       "parameter_list": [
-        "const char*"
+        "const char*",
+        "uint8_t*"
       ]
     },
     {

@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 3.15)
 
 cmake_policy(SET CMP0091 NEW)
 
-project(labview-grpc C CXX)
+project(grpc_labview C CXX)
 
 math(EXPR _BITNESS "8*${CMAKE_SIZEOF_VOID_P}")
 
@@ -18,12 +18,19 @@ set(VISIBILITY_INLINES_HIDDEN ON)
 set(WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 
 if(MSVC)
-  add_definitions(-D_WIN32_WINNT=0x600 -D_PS_${CMAKE_SIZEOF_VOID_P})
+  add_definitions(-D_WIN32_WINNT=0x600)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   add_compile_options("$<$<NOT:$<CONFIG:Debug>>:/Zi>")
   add_link_options("$<$<NOT:$<CONFIG:Debug>>:/DEBUG>")
   add_link_options("$<$<NOT:$<CONFIG:Debug>>:/OPT:REF>")
   add_link_options("$<$<NOT:$<CONFIG:Debug>>:/OPT:ICF>")
+  set(_GRPC_LV_PLATFORM_NAME Win${_BITNESS})
+elseif(UNIX)
+  if(CMAKE_CROSSCOMPILING)
+    set(_GRPC_LV_PLATFORM_NAME LinuxRT)
+  else()
+    set(_GRPC_LV_PLATFORM_NAME Linux)
+  endif()
 endif()
 
 find_package(Threads REQUIRED)
@@ -31,6 +38,16 @@ find_package(Threads REQUIRED)
 # ----------------------------------------------------------------------
 # Get the project dependencies
 # ----------------------------------------------------------------------
+
+set(gRPC_BUILD_CODEGEN ON CACHE INTERNAL "CODEGEN ON")
+set(gRPC_BUILD_CSHARP_EXT OFF CACHE INTERNAL "CSHARP_EXT OFF")
+set(gRPC_BUILD_GRPC_CPP_PLUGIN ON CACHE INTERNAL "CPP_PLUGIN ON")
+set(gRPC_BUILD_GRPC_CSHARP_PLUGIN OFF CACHE INTERNAL "CSHARP_PLUGIN OFF")
+set(gRPC_BUILD_GRPC_NODE_PLUGIN OFF CACHE INTERNAL "NODE_PLUGIN OFF")
+set(gRPC_BUILD_GRPC_OBJECTIVE_C_PLUGIN OFF CACHE INTERNAL "OBJECTIVE_C_PLUGIN OFF")
+set(gRPC_BUILD_GRPC_PHP_PLUGIN OFF CACHE INTERNAL "PHP_PLUGIN OFF")
+set(gRPC_BUILD_GRPC_PYTHON_PLUGIN ON CACHE INTERNAL "PYTHON_PLUGIN ON")
+set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF CACHE INTERNAL "RUBY_PLUGIN OFF")
 
 include(FetchContent)
 FetchContent_Declare(
@@ -49,14 +66,6 @@ FetchContent_Declare(
   UPDATE_DISCONNECTED ON # prevents trying to patch multiple times
 )
 FetchContent_MakeAvailable(whereami)
-
-include(FetchContent)
-FetchContent_Declare(
-  ghc_filesystem
-  GIT_REPOSITORY https://github.com/gulrak/filesystem.git
-  GIT_TAG        8a2edd6d92ed820521d42c94d179462bf06b5ed3  # v1.5.14
-)
-FetchContent_MakeAvailable(ghc_filesystem)
 
 
 # ----------------------------------------------------------------------
@@ -94,7 +103,7 @@ add_custom_target(Detect_Compatibility_Breaks
   WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 
-add_library(labview_grpc_server SHARED
+add_library(${PROJECT_NAME} SHARED
   src/any_support.cc
   src/cluster_copier.cc
   src/event_data.cc
@@ -113,31 +122,39 @@ add_library(labview_grpc_server SHARED
   src/unpacked_fields.cc
   src/grpc_entry_point.cc
 )
-target_link_libraries(labview_grpc_server
+target_link_libraries(${PROJECT_NAME}
   PRIVATE
   whereami
-  ghc_filesystem
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
-set_target_properties(labview_grpc_server PROPERTIES OUTPUT_NAME labview_grpc_server${_BITNESS})
+if(MSVC)
+  target_compile_definitions(${PROJECT_NAME} PRIVATE _PS_${CMAKE_SIZEOF_VOID_P})
+  set_target_properties(${PROJECT_NAME} PROPERTIES PREFIX "lib")
+endif()
 
 # ----------------------------------------------------------------------
 # LabVIEW code generator support library to generate client and
 # server VIs from a .proto file
 # ----------------------------------------------------------------------
-add_library(labview_grpc_generator SHARED
+add_library(${PROJECT_NAME}_generator SHARED
   src/feature_toggles.cc
   src/lv_interop.cc
   src/proto_parser.cc
+  src/grpc_entry_point.cc
 )
-target_link_libraries(labview_grpc_generator
+target_link_libraries(${PROJECT_NAME}_generator
+  PRIVATE
+  whereami
   ${_REFLECTION}
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
-set_target_properties(labview_grpc_generator PROPERTIES OUTPUT_NAME labview_grpc_generator${_BITNESS})
+if(MSVC)
+  target_compile_definitions(${PROJECT_NAME}_generator PRIVATE _PS_${CMAKE_SIZEOF_VOID_P})
+  set_target_properties(${PROJECT_NAME}_generator PROPERTIES PREFIX "lib")
+endif()
 
 # ######################################################################
 # QueryServer Example
@@ -232,25 +249,26 @@ target_link_libraries(test_server
   ${_GRPC_GRPCPP}
   ${_PROTOBUF_LIBPROTOBUF})
 
-add_dependencies(labview_grpc_server Detect_Compatibility_Breaks)
-add_dependencies(labview_grpc_generator Detect_Compatibility_Breaks)
+add_dependencies(${PROJECT_NAME} Detect_Compatibility_Breaks)
+add_dependencies(${PROJECT_NAME}_generator Detect_Compatibility_Breaks)
 add_dependencies(test_client Detect_Compatibility_Breaks)
 add_dependencies(test_server Detect_Compatibility_Breaks)
 add_dependencies(example_client Detect_Compatibility_Breaks)
 
 
 # ----------------------------------------------------------------------
-# Add a labview-src local install directory for easier dll/.so development/debugging
+# Add a labview-src local install directory for easier dll development/debugging
 # ----------------------------------------------------------------------
-SET(_LABVIEW_SOURCE_DIR "${CMAKE_CURRENT_LIST_DIR}/labview source")
-install(TARGETS labview_grpc_server
-    RUNTIME DESTINATION ${_LABVIEW_SOURCE_DIR}
-    LIBRARY DESTINATION ${_LABVIEW_SOURCE_DIR}
-    COMPONENT labview_grpc
+SET(_GRPC_LV_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gRPC LabVIEW/Libraries/${_GRPC_LV_PLATFORM_NAME}")
+install(TARGETS ${PROJECT_NAME}
+  COMPONENT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${_GRPC_LV_INSTALL_DIR}
+  LIBRARY DESTINATION ${_GRPC_LV_INSTALL_DIR}
 )
 
-install(TARGETS labview_grpc_generator
-    RUNTIME DESTINATION ${_LABVIEW_SOURCE_DIR}
-    LIBRARY DESTINATION ${_LABVIEW_SOURCE_DIR}
-    COMPONENT labview_grpc
+SET(_GRPC_LV_GENERATOR_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gRPC LabVIEW Generator/Libraries/${_GRPC_LV_PLATFORM_NAME}")
+install(TARGETS ${PROJECT_NAME}_generator
+  COMPONENT ${PROJECT_NAME}
+  RUNTIME DESTINATION ${_GRPC_LV_GENERATOR_INSTALL_DIR}
+  LIBRARY DESTINATION ${_GRPC_LV_GENERATOR_INSTALL_DIR}
 )

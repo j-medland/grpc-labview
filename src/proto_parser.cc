@@ -181,20 +181,20 @@ namespace grpc_labview
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetgRPCAPIVersion(int* version)
+LIBRARY_EXPORT int32_t LVGetgRPCAPIVersion(int* version, grpc_labview::MagicCookie *callbackInitOccurrence)
 {
-    grpc_labview::InitCallbacks();
-
     *version = 2;
-    return 0;    
+    return grpc_labview::InitCallbacks(*callbackInitOccurrence);    
 }
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVCreateParser(grpc_labview::LVProtoParser** parser)
+LIBRARY_EXPORT int32_t LVCreateParser(grpc_labview::LVProtoParser** parser, grpc_labview::MagicCookie *callbackInitOccurrence)
 {
-    grpc_labview::InitCallbacks();
-
+    auto result = grpc_labview::InitCallbacks(*callbackInitOccurrence);
+    if(result){
+        return result;
+    }
     *parser = new grpc_labview::LVProtoParser();
     return 0;
 }
@@ -202,7 +202,7 @@ LIBRARY_EXPORT int LVCreateParser(grpc_labview::LVProtoParser** parser)
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVAddParserSearchPath(grpc_labview::LVProtoParser* parser, const char* searchPath)
+LIBRARY_EXPORT int32_t LVAddParserSearchPath(grpc_labview::LVProtoParser* parser, const char* searchPath)
 {
     if (parser == nullptr)
     {
@@ -214,7 +214,7 @@ LIBRARY_EXPORT int LVAddParserSearchPath(grpc_labview::LVProtoParser* parser, co
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVImportProto2(grpc_labview::LVProtoParser* parser, const char* filePath, const char* searchPath)
+LIBRARY_EXPORT int32_t LVImportProto2(grpc_labview::LVProtoParser* parser, const char* filePath, const char* searchPath)
 {
     if (parser == nullptr)
     {
@@ -226,10 +226,12 @@ LIBRARY_EXPORT int LVImportProto2(grpc_labview::LVProtoParser* parser, const cha
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVImportProto(const char* filePath, const char* searchPath, grpc_labview::LVProtoParser** parser)
+LIBRARY_EXPORT int32_t LVImportProto(const char* filePath, const char* searchPath, grpc_labview::LVProtoParser** parser, grpc_labview::MagicCookie *callbackInitOccurrence)
 {
-    grpc_labview::InitCallbacks();
-
+    auto result = grpc_labview::InitCallbacks(*callbackInitOccurrence);
+    if(result){
+        return result;
+    }
     *parser = new grpc_labview::LVProtoParser();
     (*parser)->Import(filePath, searchPath);
     return 0;    
@@ -237,7 +239,7 @@ LIBRARY_EXPORT int LVImportProto(const char* filePath, const char* searchPath, g
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetErrorString(grpc_labview::LVProtoParser* parser, grpc_labview::LStrHandle* error)
+LIBRARY_EXPORT int32_t LVGetErrorString(grpc_labview::LVProtoParser* parser, grpc_labview::LStrHandle* error)
 {
     if (parser == nullptr)
     {
@@ -250,7 +252,7 @@ LIBRARY_EXPORT int LVGetErrorString(grpc_labview::LVProtoParser* parser, grpc_la
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetServices(grpc_labview::LVProtoParser* parser, grpc_labview::LV1DArrayHandle* services)
+LIBRARY_EXPORT int32_t LVGetServices(grpc_labview::LVProtoParser* parser, grpc_labview::LV1DArrayHandle* services)
 {
     if (parser == nullptr)
     {
@@ -278,7 +280,7 @@ LIBRARY_EXPORT int LVGetServices(grpc_labview::LVProtoParser* parser, grpc_labvi
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetMessages(grpc_labview::LVProtoParser* parser, grpc_labview::LV1DArrayHandle* messages)
+LIBRARY_EXPORT int32_t LVGetMessages(grpc_labview::LVProtoParser* parser, grpc_labview::LV1DArrayHandle* messages)
 {
     if (parser == nullptr)
     {
@@ -354,7 +356,7 @@ void AddNestedEnums(grpc_labview::LV1DArrayHandle* messages, std::set<const goog
     }
 }
 
-LIBRARY_EXPORT int LVGetEnums(grpc_labview::LVProtoParser* parser, grpc_labview::LV1DArrayHandle* messages, grpc_labview::LV1DArrayHandle* enums)
+LIBRARY_EXPORT int32_t LVGetEnums(grpc_labview::LVProtoParser* parser, grpc_labview::LV1DArrayHandle* messages, grpc_labview::LV1DArrayHandle* enums)
 {
     if (parser == nullptr)
     {
@@ -387,7 +389,7 @@ LIBRARY_EXPORT int LVGetEnums(grpc_labview::LVProtoParser* parser, grpc_labview:
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetServiceName(ServiceDescriptor* service, grpc_labview::LStrHandle* name)
+LIBRARY_EXPORT int32_t LVGetServiceName(ServiceDescriptor* service, grpc_labview::LStrHandle* name)
 {
     if (service == nullptr)
     {
@@ -399,7 +401,7 @@ LIBRARY_EXPORT int LVGetServiceName(ServiceDescriptor* service, grpc_labview::LS
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetServiceMethods(ServiceDescriptor* service, grpc_labview::LV1DArrayHandle* methods)
+LIBRARY_EXPORT int32_t LVGetServiceMethods(ServiceDescriptor* service, grpc_labview::LV1DArrayHandle* methods)
 {
     if (service == nullptr)
     {
@@ -422,7 +424,7 @@ LIBRARY_EXPORT int LVGetServiceMethods(ServiceDescriptor* service, grpc_labview:
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetMethodName(MethodDescriptor* method, grpc_labview::LStrHandle* name)
+LIBRARY_EXPORT int32_t LVGetMethodName(MethodDescriptor* method, grpc_labview::LStrHandle* name)
 {
     if (method == nullptr)
     {
@@ -434,7 +436,7 @@ LIBRARY_EXPORT int LVGetMethodName(MethodDescriptor* method, grpc_labview::LStrH
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetMethodFullName(MethodDescriptor* method, grpc_labview::LStrHandle* name)
+LIBRARY_EXPORT int32_t LVGetMethodFullName(MethodDescriptor* method, grpc_labview::LStrHandle* name)
 {
     if (method == nullptr)
     {
@@ -446,7 +448,7 @@ LIBRARY_EXPORT int LVGetMethodFullName(MethodDescriptor* method, grpc_labview::L
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVIsMethodClientStreaming(MethodDescriptor* method, int* clientStreaming)
+LIBRARY_EXPORT int32_t LVIsMethodClientStreaming(MethodDescriptor* method, int* clientStreaming)
 {
     if (method == nullptr)
     {
@@ -458,7 +460,7 @@ LIBRARY_EXPORT int LVIsMethodClientStreaming(MethodDescriptor* method, int* clie
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVIsMethodServerStreaming(MethodDescriptor* method, int* serverStreaming)
+LIBRARY_EXPORT int32_t LVIsMethodServerStreaming(MethodDescriptor* method, int* serverStreaming)
 {
     if (method == nullptr)
     {
@@ -470,7 +472,7 @@ LIBRARY_EXPORT int LVIsMethodServerStreaming(MethodDescriptor* method, int* serv
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetMethodInput(MethodDescriptor* method, const Descriptor** inputType)
+LIBRARY_EXPORT int32_t LVGetMethodInput(MethodDescriptor* method, const Descriptor** inputType)
 {
     if (method == nullptr)
     {
@@ -482,7 +484,7 @@ LIBRARY_EXPORT int LVGetMethodInput(MethodDescriptor* method, const Descriptor**
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetMethodOutput(MethodDescriptor* method, const Descriptor** outputType)
+LIBRARY_EXPORT int32_t LVGetMethodOutput(MethodDescriptor* method, const Descriptor** outputType)
 {
     if (method == nullptr)
     {
@@ -494,7 +496,7 @@ LIBRARY_EXPORT int LVGetMethodOutput(MethodDescriptor* method, const Descriptor*
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVMessageName(Descriptor* descriptor, grpc_labview::LStrHandle* name)
+LIBRARY_EXPORT int32_t LVMessageName(Descriptor* descriptor, grpc_labview::LStrHandle* name)
 {
     if (descriptor == nullptr)
     {
@@ -506,7 +508,7 @@ LIBRARY_EXPORT int LVMessageName(Descriptor* descriptor, grpc_labview::LStrHandl
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVMessageTypeUrl(Descriptor* descriptor, grpc_labview::LStrHandle* name)
+LIBRARY_EXPORT int32_t LVMessageTypeUrl(Descriptor* descriptor, grpc_labview::LStrHandle* name)
 {
     if (descriptor == nullptr)
     {
@@ -518,7 +520,7 @@ LIBRARY_EXPORT int LVMessageTypeUrl(Descriptor* descriptor, grpc_labview::LStrHa
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVMessageHasOneof(Descriptor* descriptor, int* hasOneof)
+LIBRARY_EXPORT int32_t LVMessageHasOneof(Descriptor* descriptor, int* hasOneof)
 {
     if (descriptor == nullptr)
     {
@@ -530,7 +532,7 @@ LIBRARY_EXPORT int LVMessageHasOneof(Descriptor* descriptor, int* hasOneof)
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVEnumName(EnumDescriptor* descriptor, grpc_labview::LStrHandle* name)
+LIBRARY_EXPORT int32_t LVEnumName(EnumDescriptor* descriptor, grpc_labview::LStrHandle* name)
 {
     if (descriptor == nullptr)
     {
@@ -542,7 +544,7 @@ LIBRARY_EXPORT int LVEnumName(EnumDescriptor* descriptor, grpc_labview::LStrHand
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVEnumTypeUrl(EnumDescriptor* descriptor, grpc_labview::LStrHandle* name)
+LIBRARY_EXPORT int32_t LVEnumTypeUrl(EnumDescriptor* descriptor, grpc_labview::LStrHandle* name)
 {
     if (descriptor == nullptr)
     {
@@ -563,7 +565,7 @@ LIBRARY_EXPORT void SerializeReflectionInfo(grpc_labview::LVProtoParser *parser,
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVGetFields(Descriptor* descriptor, grpc_labview::LV1DArrayHandle* fields)
+LIBRARY_EXPORT int32_t LVGetFields(Descriptor* descriptor, grpc_labview::LV1DArrayHandle* fields)
 {
     if (descriptor == nullptr)
     {
@@ -587,7 +589,7 @@ std::string GetEnumNames(google::protobuf::EnumDescriptor* field);
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int LVFieldInfo(FieldDescriptor* field, grpc_labview::MessageFieldCluster* info)
+LIBRARY_EXPORT int32_t LVFieldInfo(FieldDescriptor* field, grpc_labview::MessageFieldCluster* info)
 {
     if (field == nullptr)
     {
@@ -672,7 +674,7 @@ LIBRARY_EXPORT int LVFieldInfo(FieldDescriptor* field, grpc_labview::MessageFiel
     return error;
 }
 
-LIBRARY_EXPORT int GetEnumInfo(EnumDescriptor* enumDescriptor, grpc_labview::EnumFieldCluster* info)
+LIBRARY_EXPORT int32_t GetEnumInfo(EnumDescriptor* enumDescriptor, grpc_labview::EnumFieldCluster* info)
 {
     if (enumDescriptor == nullptr)
     {

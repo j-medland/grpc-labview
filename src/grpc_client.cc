@@ -172,10 +172,12 @@ void CheckActiveAndSignalOccurenceForClientCall(grpc_labview::ClientCall *client
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t CreateClient(const char *address, const char *certificatePath, grpc_labview::gRPCid **clientId)
+LIBRARY_EXPORT int32_t CreateClient(const char *address, const char *certificatePath, grpc_labview::gRPCid **clientId, grpc_labview::MagicCookie* occurrence)
 {
-    grpc_labview::InitCallbacks();
-
+    auto result = grpc_labview::InitCallbacks(*occurrence);
+    if(result){
+        return 1000-result;
+    }
     auto client = new grpc_labview::LabVIEWgRPCClient();
     client->Connect(address, certificatePath);
     *clientId = grpc_labview::gPointerManager.RegisterPointer(client);
@@ -205,12 +207,14 @@ void CheckActiveAndSignalOccurenceForClientCall(grpc_labview::ClientCall *client
     }
     if (clientCall->_cancelled == true)
     {
-        grpc_labview::SignalOccurrence(clientCall->_occurrence);
+        uint8_t data = 1;
+        grpc_labview::PostUserEvent(clientCall->_occurrenceUserEvent,&data);
     }
     std::unique_lock<std::mutex> lock(clientCall->_client->clientLock);
     if (clientCall->_client->ActiveClientCalls.find(clientCall) != clientCall->_client->ActiveClientCalls.end())
     {
-        grpc_labview::SignalOccurrence(clientCall->_occurrence);
+        uint8_t data = 1;
+        grpc_labview::PostUserEvent(clientCall->_occurrenceUserEvent,&data);
     }
 }
 
@@ -269,8 +273,8 @@ LIBRARY_EXPORT int32_t CloseClientContext(grpc_labview::gRPCid *contextId)
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 LIBRARY_EXPORT int32_t ClientUnaryCall2(
+    grpc_labview::LVUserEventRef *occurrenceUserEvent,
     grpc_labview::gRPCid *clientId,
-    grpc_labview::MagicCookie *occurrence,
     const char *methodName,
     const char *requestMessageName,
     const char *responseMessageName,
@@ -318,10 +322,10 @@ LIBRARY_EXPORT int32_t ClientUnaryCall2(
 
     if(featureConfig.isFeatureEnabled("data_useOccurrence"))
     {
-        clientCall->_occurrence = *occurrence;
+        clientCall->_occurrenceUserEvent = *occurrenceUserEvent;
     }
     else{
-        clientCall->_occurrence = 0;
+        clientCall->_occurrenceUserEvent = 0;
     }
     clientCall->_context = clientContext;
 
@@ -358,7 +362,7 @@ LIBRARY_EXPORT int32_t ClientUnaryCall2(
         {
             grpc::internal::RpcMethod method(clientCall->_methodName.c_str(), grpc::internal::RpcMethod::NORMAL_RPC);
             clientCall->_status = grpc::internal::BlockingUnaryCall(clientCall->_client->Channel.get(), method, &(clientCall->_context.get()->gRPCClientContext), *clientCall->_request.get(), clientCall->_response.get());
-            if(clientCall->_occurrence != 0)
+            if(clientCall->_occurrenceUserEvent != 0)
             {
                 CheckActiveAndSignalOccurenceForClientCall(clientCall);
             }
@@ -370,8 +374,8 @@ LIBRARY_EXPORT int32_t ClientUnaryCall2(
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 LIBRARY_EXPORT int32_t ClientUnaryCall(
+    grpc_labview::LVUserEventRef *occurrenceUserEvent,
     grpc_labview::gRPCid *clientId,
-    grpc_labview::MagicCookie *occurrence,
     const char *methodName,
     const char *requestMessageName,
     const char *responseMessageName,
@@ -380,7 +384,7 @@ LIBRARY_EXPORT int32_t ClientUnaryCall(
     int32_t timeoutMs,
     grpc_labview::gRPCid *contextId)
 {
-    return ClientUnaryCall2(clientId, occurrence, methodName, requestMessageName, responseMessageName, requestCluster, callId, timeoutMs, contextId, nullptr);
+    return ClientUnaryCall2(occurrenceUserEvent, clientId, methodName, requestMessageName, responseMessageName, requestCluster, callId, timeoutMs, contextId, nullptr);
 }
 
 
@@ -623,35 +627,36 @@ LIBRARY_EXPORT int32_t ClientBeginBidiStreamingCall(
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t ClientBeginReadFromStream(grpc_labview::gRPCid *callId, grpc_labview::MagicCookie *occurrencePtr)
+LIBRARY_EXPORT int32_t ClientBeginReadFromStream(grpc_labview::gRPCid *callId, grpc_labview::LVUserEventRef *occurenceUserEventPtr)
 {
     auto reader = callId->CastTo<grpc_labview::StreamReader>();
     auto call = callId->CastTo<grpc_labview::ClientCall>();
 
     auto featureConfig = grpc_labview::FeatureConfig::getInstance();
 
-    grpc_labview::MagicCookie occurrence = 0;
+    grpc_labview::LVUserEventRef occurrence = 0;
     if (featureConfig.isFeatureEnabled("data_useOccurrence"))
     {
-        occurrence = *occurrencePtr;
+        occurrence = *occurenceUserEventPtr;
     }
 
     if (!reader || !call)
     {
         if (occurrence != 0){
-            grpc_labview::SignalOccurrence(occurrence);
+            uint8_t data = 0;
+            grpc_labview::PostUserEvent(occurrence, &data);
         }
         return -1;
     }
 
-    call->_occurrence = occurrence;
+    call->_occurrenceUserEvent = occurrence;
     reader->_readFuture = std::async(
         std::launch::async,
         [call, reader]()
         {
             call->_response->Clear();
             auto result = reader->Read(call->_response.get());
-            if (call->_occurrence != 0){
+            if (call->_occurrenceUserEvent != 0){
                 CheckActiveAndSignalOccurenceForClientCall(call.get());
             }
             return result;
@@ -779,7 +784,7 @@ LIBRARY_EXPORT int32_t FinishClientCompleteClientStreamingCall(
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-LIBRARY_EXPORT int32_t ClientCompleteClientStreamingCall(grpc_labview::gRPCid *callId, grpc_labview::MagicCookie *occurrencePtr)
+LIBRARY_EXPORT int32_t ClientCompleteClientStreamingCall( grpc_labview::LVUserEventRef *occurrenceUserEvent, grpc_labview::gRPCid *callId)
 {
     auto call = callId->CastTo<grpc_labview::ClientCall>();
     if (!call)
@@ -789,17 +794,17 @@ LIBRARY_EXPORT int32_t ClientCompleteClientStreamingCall(grpc_labview::gRPCid *c
     auto featureConfig = grpc_labview::FeatureConfig::getInstance();
 
     if(featureConfig.isFeatureEnabled("data_useOccurrence")){
-        call->_occurrence = *occurrencePtr;
+        call->_occurrenceUserEvent = *occurrenceUserEvent;
     }
     else{
-        call->_occurrence = 0;
+        call->_occurrenceUserEvent = 0;
     }
     call->_runFuture = std::async(
         std::launch::async,
         [call]()
         {
             call->Finish();
-            if(call->_occurrence != 0){
+            if(call->_occurrenceUserEvent != 0){
                 CheckActiveAndSignalOccurenceForClientCall(call.get());
             }
             return 0;
