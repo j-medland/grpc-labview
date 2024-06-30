@@ -1,6 +1,6 @@
 # ----------------------------------------------------------------------
 # ----------------------------------------------------------------------
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.21)
 
 cmake_policy(SET CMP0091 NEW)
 
@@ -20,10 +20,6 @@ set(WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 if(MSVC)
   add_definitions(-D_WIN32_WINNT=0x600)
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
-  add_compile_options("$<$<NOT:$<CONFIG:Debug>>:/Zi>")
-  add_link_options("$<$<NOT:$<CONFIG:Debug>>:/DEBUG>")
-  add_link_options("$<$<NOT:$<CONFIG:Debug>>:/OPT:REF>")
-  add_link_options("$<$<NOT:$<CONFIG:Debug>>:/OPT:ICF>")
   set(_GRPC_LV_PLATFORM_NAME Win${_BITNESS})
 elseif(UNIX)
   if(CMAKE_CROSSCOMPILING)
@@ -49,14 +45,7 @@ set(gRPC_BUILD_GRPC_PHP_PLUGIN OFF CACHE INTERNAL "PHP_PLUGIN OFF")
 set(gRPC_BUILD_GRPC_PYTHON_PLUGIN ON CACHE INTERNAL "PYTHON_PLUGIN ON")
 set(gRPC_BUILD_GRPC_RUBY_PLUGIN OFF CACHE INTERNAL "RUBY_PLUGIN OFF")
 
-include(FetchContent)
-FetchContent_Declare(
-  gRPC
-  GIT_REPOSITORY https://github.com/grpc/grpc
-  GIT_TAG        591d56e1300b6d11948e1b821efac785a295989c  # V1.44
-)
-set(FETCHCONTENT_QUIET OFF)
-FetchContent_MakeAvailable(gRPC)
+find_package(grpc REQUIRED)
 
 FetchContent_Declare(
   whereami

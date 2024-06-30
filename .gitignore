@@ -13,7 +13,7 @@ gens
 grpc
 
 Builds
-build
+build*
 .vs
 .vscode
 __pycache__

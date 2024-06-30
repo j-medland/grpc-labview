@@ -15,6 +15,9 @@
 		<Property Name="server.vi.callsEnabled" Type="Bool">true</Property>
 		<Property Name="server.vi.propertiesEnabled" Type="Bool">true</Property>
 		<Property Name="specify.custom.address" Type="Bool">false</Property>
+		<Item Name="Libraries" Type="Folder" URL="../../../gRPC LabVIEW/Libraries">
+			<Property Name="NI.DISK" Type="Bool">true</Property>
+		</Item>
 		<Item Name="Check Conditional Disables.vi" Type="VI" URL="../Check Conditional Disables.vi"/>
 		<Item Name="Fix CLFN Paths.vi" Type="VI" URL="../Fix CLFN Paths.vi"/>
 		<Item Name="grpc-lvsupport.lvlib" Type="Library" URL="../grpc-lvsupport/grpc-lvsupport.lvlib"/>
