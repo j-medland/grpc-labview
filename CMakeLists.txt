@@ -175,6 +175,14 @@ install(TARGETS ${PROJECT_NAME}_generator
 )
 
 # ----------------------------------------------------------------------
+# Add a custom target which will install just the labview components
+# ----------------------------------------------------------------------
+add_custom_target(install_${PROJECT_NAME}
+    COMMAND ${CMAKE_COMMAND} --install "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>" --component ${PROJECT_NAME}
+    DEPENDS ${PROJECT_NAME} ${PROJECT_NAME}_generator)
+
+
+# ----------------------------------------------------------------------
 # LabVIEW Compatability Checks
 # ----------------------------------------------------------------------
 add_custom_target(Detect_Compatibility_Breaks

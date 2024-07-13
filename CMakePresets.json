@@ -41,11 +41,18 @@
     ],
     "buildPresets": [
         {
+            "name": "build-base",
+            "hidden": true,
+            "targets": "install_grpc_labview"
+        },
+        {
             "name": "windows-debug-build",
+            "inherits": "build-base",
             "configurePreset": "windows-debug"
         },
         {
             "name": "windows-release-build",
+            "inherits": "build-base",
             "configurePreset": "windows-release"
         }
     ]

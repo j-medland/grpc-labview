@@ -41,12 +41,12 @@ Download the repo
 
 Build Debug
 ```console
-cmake --preset windows-debug && cmake --build --preset windows-debug-build && cmake --install --component grpc_labview
+cmake --preset windows-debug && cmake --build --preset windows-debug-build --target install_grpc_labview
 ```
 
 Build Release
 ```console
-cmake --preset windows-release && cmake --build --preset windows-release-build && cmake --install --component grpc_labview
+cmake --preset windows-release && cmake --build --preset windows-release-build --target install_grpc_labview
 ```
 
 ### Building on Linux
