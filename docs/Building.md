@@ -19,61 +19,34 @@ To prepare for cmake + Microsoft Visual C++ compiler build
 - Install [Git](https://git-scm.com/).
 - Install [CMake](https://cmake.org/download/).
 - Install [Python 3.7 or Higher](https://www.python.org/downloads/).
+- Install [nasm](https://www.nasm.us/) and add it to `PATH`
+- Install [ninja-build](https://github.com/ninja-build/ninja/releases) and add it to `PATH`
 
 
-#### Building 64-bit
+#### Building
 
-**Launch "x64 Native Tools Command Prompt for Visual Studio"**
+Launch the command prompt for the build bitness you want to build for
 
-Download the repo and update submodules, this will pull the gRPC components and all dependencies
+| Bitness | Command Prompt                                       |
+|---------|------------------------------------------------------|
+| 64 bit  | `x64 Native Tools Command Prompt for Visual Studio`  |
+| 32 bit  | `x86 Native Tools Command Prompt for Visual Studio`  |
 
-```
-> git clone https://github.com/ni/grpc-labview.git grpc-labview
+Download the repo
+
+```console
+> git clone https://github.com/ni/grpc-labview.git
 > cd grpc-labview
-> git submodule update --init --recursive
 ```
 
 Build Debug
-```
-> mkdir build
-> cd build
-> cmake ..
-> cmake --build .
+```console
+cmake --preset windows-debug && cmake --build --preset windows-debug-build && cmake --install --component grpc_labview
 ```
 
 Build Release
-```
-> mkdir build
-> cd build
-> cmake ..
-> cmake --build . --config Release
-```
-#### Building 32-bit
-
-**Launch "x86 Native Tools Command Prompt for Visual Studio"**
-
-Download the repo and update submodules, this will pull the gRPC components and all dependencies
-
-```
-> git clone https://github.com/ni/grpc-labview.git grpc-labview
-> cd grpc-labview
-> git submodule update --init --recursive
-```
-
-Build Debug
-```
-> mkdir build
-> cd build
-> cmake -A Win32 ..
-> cmake --build .
-```
-
-Build Release
-```
-> mkdir build
-> cd build
-> cmake -A Win32 ..
-> cmake --build . --config Release
+```console
+cmake --preset windows-release && cmake --build --preset windows-release-build && cmake --install --component grpc_labview
 ```
 
 ### Building on Linux

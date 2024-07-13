@@ -9,13 +9,13 @@
         {
             "name": "base",
             "hidden": true,
-            "binaryDir": "${sourceDir}/build/${presetName}",
             "generator": "Ninja"
         },
         {
             "name": "windows-base",
             "inherits": "base",
             "hidden": true,
+            "binaryDir": "${sourceDir}/build/windows-$penv{Platform}",
             "condition": {
                 "type": "equals",
                 "lhs": "${hostSystemName}",
@@ -23,51 +23,17 @@
             }
         },
         {
-            "name": "windows-x64",
-            "inherits": "windows-base",
-            "hidden": true,
-            "architecture": {
-                "value": "x64",
-                "strategy": "external"
-            }
-        },
-        {
-            "name": "windows-x86",
-            "inherits": "windows-base",
-            "hidden": true,
-            "architecture": {
-                "value": "x86",
-                "strategy": "external"
-            }
-        },
-        {
-            "name": "windows-x64-debug",
+            "name": "windows-debug",
             "hidden": false,
-            "inherits": "windows-x64",
+            "inherits": "windows-base",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Debug"
             }
         },
         {
-            "name": "windows-x64-release",
-            "inherits": "windows-x64",
+            "name": "windows-release",
+            "inherits": "windows-base",
             "hidden": false,
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Release"
-            }
-        },
-        {
-            "name": "windows-x86-debug",
-            "hidden": false,
-            "inherits": "windows-x86",
-            "cacheVariables": {
-                "CMAKE_BUILD_TYPE": "Debug"
-            }
-        },
-        {
-            "name": "windows-x86-release",
-            "hidden": false,
-            "inherits": "windows-x86",
             "cacheVariables": {
                 "CMAKE_BUILD_TYPE": "Release"
             }
@@ -75,21 +41,12 @@
     ],
     "buildPresets": [
         {
-            "name": "windows-x64-debug-build",
-            "displayName": "x64 Windows with Debug",
-            "configurePreset": "windows-x64-debug"
+            "name": "windows-debug-build",
+            "configurePreset": "windows-debug"
         },
         {
-            "name": "windows-x86-debug-build",
-            "configurePreset": "windows-x86-debug"
-        },
-        {
-            "name": "windows-x64-release-build",
-            "configurePreset": "windows-x64-release"
-        },
-        {
-            "name": "windows-x86-release-build",
-            "configurePreset": "windows-x86-release"
+            "name": "windows-release-build",
+            "configurePreset": "windows-release"
         }
     ]
 }

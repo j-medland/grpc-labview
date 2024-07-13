@@ -16,7 +16,8 @@ set(WINDOWS_EXPORT_ALL_SYMBOLS OFF)
 set(BUILD_SHARED_LIBS OFF)
 
 if(MSVC)
-  # Force Static Runtime for Protobuf build
+  # Force Static Runtime for Protobuf build - required for protobuf version used by grpc V1.44
+  # Fixed in https://github.com/protocolbuffers/protobuf/pull/9437
   set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
   set(_GRPC_LV_PLATFORM_NAME Win${_BITNESS})
 elseif(UNIX)
@@ -59,6 +60,7 @@ FetchContent_Declare(
   gRPC
   GIT_REPOSITORY https://github.com/grpc/grpc
   GIT_TAG 591d56e1300b6d11948e1b821efac785a295989c # V1.44
+  UPDATE_DISCONNECTED ON # prevents trying to download multiple times
 )
 set(FETCHCONTENT_QUIET OFF)
 FetchContent_MakeAvailable(gRPC)
@@ -96,10 +98,8 @@ add_library(${PROJECT_NAME} SHARED
 )
 
 target_include_directories(${PROJECT_NAME} PRIVATE
-
   # custom LV reflection service requires this grpc-internal include directory
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/gens"
-
   # add binary directory so auto-generated grpc_labview_export.h is found
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )
@@ -141,10 +141,8 @@ target_link_libraries(${PROJECT_NAME}_generator
   libprotobuf)
 
 target_include_directories(${PROJECT_NAME}_generator PRIVATE
-
   # custom LV reflection service requires this grpc-internal include directory
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>/gens"
-
   # add binary directory so auto-generated grpc_labview_export.h is found
   "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}>"
 )
