@@ -10,24 +10,18 @@
 #endif
 
 #include <grpcpp/impl/server_initializer.h>
-#include <src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h>
+#include <grpcpp/ext/proto_server_reflection_plugin.h>
 
-using grpc::ServerContext;
+// borrow this grpc-internal proto-generated include to define our custom reflection service
+#include <src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h> 
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 using grpc::Status;
 using grpc::ServerInitializer;
+using grpc::ServerContext;
 using grpc::reflection::v1alpha::ServerReflectionRequest;
 using grpc::reflection::v1alpha::ServerReflectionResponse;
-
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-#ifdef _WIN32
-    #define LIBRARY_EXPORT extern "C" __declspec(dllexport)
-#else
-    #define LIBRARY_EXPORT extern "C"
-#endif
 
 namespace grpc_labview 
 {

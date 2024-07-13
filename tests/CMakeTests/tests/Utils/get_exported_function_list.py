@@ -5,7 +5,7 @@ from pathlib import Path
 folder_path = Path(__file__).parent.parent.parent.parent.parent / "src"
 
 # Regex pattern to match exported function signatures
-pattern = re.compile(r'\bLIBRARY_EXPORT\b\s+(.*?)\s*{', re.DOTALL)
+pattern = re.compile(r'\bGRPC_LABVIEW_EXPORT\b\s+(.*?)\s*{', re.DOTALL)
 
 def getFunctionSignatureList():
     sorted_signature_list = {"size": 0, "signatures": []}

@@ -5,13 +5,16 @@
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <metadata_owner.h>
 #include <grpcpp/grpcpp.h>
-#include <lv_message.h>
 #include <grpcpp/impl/codegen/sync_stream.h>
 #include <future>
 #include <unordered_map>
 
+#include "./lv_message.h"
+#include "./metadata_owner.h"
+
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
 namespace grpc_labview
 {
     //---------------------------------------------------------------------
@@ -55,7 +58,7 @@ namespace grpc_labview
     public:
         std::shared_ptr<grpc_labview::LabVIEWgRPCClient> _client;
         std::string _methodName;
-        MagicCookie _occurrence;
+        LVUserEventRef _occurrenceUserEvent;
         std::shared_ptr<ClientContext> _context;
         std::shared_ptr<LVMessage> _request;
         std::shared_ptr<LVMessage> _response;

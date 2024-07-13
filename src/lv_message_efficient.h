@@ -2,13 +2,14 @@
 //---------------------------------------------------------------------
 #pragma once
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-#include <message_value.h>
-#include <message_metadata.h>
 #include <google/protobuf/message.h>
-#include "lv_message.h"
 
+#include "./message_value.h"
+#include "./message_metadata.h"
+#include "./lv_message.h"
+
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
 using namespace google::protobuf::internal;
 
 namespace grpc_labview 

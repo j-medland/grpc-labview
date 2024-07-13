@@ -4,17 +4,20 @@
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <grpc_server.h>
-#include <lv_interop.h>
 #include <memory>
 #include <string>
 #include <map>
 #include <mutex>
-#include <message_metadata.h>
-#include <enum_metadata.h>
-#include <message_value.h>
-#include <exceptions.h>
 
+#include "./message_metadata.h"
+#include "./enum_metadata.h"
+#include "./message_value.h"
+#include "./exceptions.h"
+#include "./grpc_server.h"
+#include "./lv_interop.h"
+
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
 namespace grpc_labview
 {
     //---------------------------------------------------------------------

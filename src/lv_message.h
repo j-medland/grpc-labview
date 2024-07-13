@@ -4,10 +4,13 @@
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <message_value.h>
-#include <message_metadata.h>
 #include <google/protobuf/message.h>
 
+#include "./message_value.h"
+#include "./message_metadata.h"
+
+//---------------------------------------------------------------------
+//---------------------------------------------------------------------
 using namespace google::protobuf::internal;
 
 namespace grpc_labview 
@@ -33,14 +36,14 @@ namespace grpc_labview
 
         const char* _InternalParse(const char* ptr, google::protobuf::internal::ParseContext* ctx)  override final;
         google::protobuf::uint8* _InternalSerialize(google::protobuf::uint8* target, google::protobuf::io::EpsCopyOutputStream* stream) const override final;
-        void SetCachedSize(int size) const final;
-        int GetCachedSize(void) const final;
+        virtual void SetCachedSize(int size) const final;
+        virtual int GetCachedSize(void) const final;
         size_t ByteSizeLong() const final;
         virtual void PostInteralParseAction() {};
         
-        void MergeFrom(const google::protobuf::Message &from) final;
+        virtual void MergeFrom(const google::protobuf::Message &from) final;
         void MergeFrom(const LVMessage &from);
-        void CopyFrom(const google::protobuf::Message &from) final;
+        virtual void CopyFrom(const google::protobuf::Message &from) final;
         void CopyFrom(const LVMessage &from);
         void InternalSwap(LVMessage *other);
         google::protobuf::Metadata GetMetadata() const final;

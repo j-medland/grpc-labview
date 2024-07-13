@@ -1,13 +1,13 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <grpc_server.h>
-#include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <thread>
 #include <sstream>
 #include <fstream>
 #include <iostream>
 #include <future>
+#include <grpcpp/ext/proto_server_reflection_plugin.h>
 
+#include "./grpc_server.h"
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 using grpc::Server;

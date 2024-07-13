@@ -1,9 +1,12 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <lv_proto_server_reflection_plugin.h>
 #include <grpcpp/impl/server_initializer.h>
 #include <grpcpp/server_builder.h>
-#include <lv_interop.h>
+
+#include <grpc_labview_export.h>
+
+#include "./lv_interop.h"
+#include "./lv_proto_server_reflection_plugin.h"
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 using grpc::ServerContext;
@@ -72,7 +75,7 @@ namespace grpc_labview
         } initializer;
     }
 
-    LIBRARY_EXPORT void DeserializeReflectionInfo(grpc_labview::LStrHandle serializedFileDescriptor)
+    GRPC_LABVIEW_EXPORT void DeserializeReflectionInfo(grpc_labview::LStrHandle serializedFileDescriptor)
     {
         std::string serializedDescriptorStr = grpc_labview::GetLVString(serializedFileDescriptor);
         LVProtoServerReflectionPlugin::GetInstance()->AddFileDescriptorProto(serializedDescriptorStr);

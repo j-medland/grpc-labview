@@ -1,12 +1,12 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
+#include <sstream>
+#include <fstream>
+#include <iostream>
 #include <grpcpp/grpcpp.h>
 #include <grpcpp/health_check_service_interface.h>
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
 #include <query_server.grpc.pb.h>
-#include <sstream>
-#include <fstream>
-#include <iostream>
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------

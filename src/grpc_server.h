@@ -21,13 +21,15 @@
 #include <grpcpp/impl/codegen/server_callback.h>
 #include <grpcpp/impl/codegen/server_callback_handlers.h>
 #include <grpcpp/impl/codegen/server_context.h>
-#include <lv_interop.h>
+
 #include <condition_variable>
 #include <future>
 #include <map>
-#include <event_data.h>
-#include <metadata_owner.h>
-#include <semaphore.h>
+
+#include "./semaphore.h"
+#include "./event_data.h"
+#include "./metadata_owner.h"
+#include "./lv_interop.h"
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
@@ -175,7 +177,7 @@ namespace grpc_labview
 
         bool _requestDataReady;
 
-        enum class CallStatus
+        enum class CallStatus : uint32_t
         {
             Create,
             Read,
@@ -235,6 +237,6 @@ namespace grpc_labview
     //---------------------------------------------------------------------
     //---------------------------------------------------------------------
     void OccurServerEvent(LVUserEventRef event, gRPCid* data);
-    void OccurServerEvent(LVUserEventRef event, gRPCid* data, std::string eventMethodName);
+    void OccurServerEvent(LVUserEventRef event, gRPCid* data, const std::string &eventMethodName);
     std::string read_keycert(const std::string &filename);
 }
