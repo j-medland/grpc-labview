@@ -57,19 +57,19 @@ class LVgRPCBuilder:
         subprocess.run(["cmake", "--build",  ".",  "--config", "Release"])
 
     def copy_binaries_all_targets(self, args):
-        server_dll_source = os.path.join(args.pathToBinaries, "LabVIEW gRPC Server")
+        server_dll_source = os.path.join(args.pathToBinaries, "gRPC LabVIEW")
         distutils.dir_util.copy_tree(server_dll_source, self.server_binary_destination)
-        generator_dll_source = os.path.join(args.pathToBinaries, "LabVIEW gRPC Generator")
+        generator_dll_source = os.path.join(args.pathToBinaries, "gRPC LabVIEW Generator")
         distutils.dir_util.copy_tree(generator_dll_source, self.generator_binary_destination)
 
     def copy_binaries_for_target(self, args):
-        server_dll_source = os.path.join(self.root_directory, "build", "Release", "labview_grpc_server.dll")
+        server_dll_source = os.path.join(self.root_directory, "Libraries", args.target, "grpc_labview.dll")
         server_dll_destination = os.path.join(self.server_binary_destination, "Libraries", args.target)
         if not os.path.exists(server_dll_destination):
             os.makedirs(server_dll_destination)
         distutils.file_util.copy_file(server_dll_source, server_dll_destination)
 
-        generator_dll_source = os.path.join(self.root_directory, "build", "Release", "labview_grpc_generator.dll")
+        generator_dll_source = os.path.join(self.root_directory, "Libraries", args.target, "grpc_labview_generator.dll")
         generator_dll_destination = os.path.join(self.generator_binary_destination, "Libraries", args.target)
         if not os.path.exists(generator_dll_destination):
             os.makedirs(generator_dll_destination)
@@ -101,7 +101,7 @@ def main():
             vipb_helper.update_vipb_version(vipb_file = vipb_file, library_version = args.libraryVersion)
 
     if args.target != "Win32" and args.target != "Win64" and args.target != "All":
-            raise Exception("Build target should be one off Win32, Win64 or All. Passed build target is " + args.target)
+            raise Exception("Build target should be one of Win32, Win64 or All. Passed build target is " + args.target)
 
     if args.target == "All" and args.pathToBinaries == "":
             raise Exception("For build target All a path to binaries should be specified using the --pathToBinaries option")

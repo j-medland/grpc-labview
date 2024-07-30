@@ -160,18 +160,11 @@ endif()
 # ----------------------------------------------------------------------
 # Add a labview-src local install directory to make locating binaries for packaging easier
 # ----------------------------------------------------------------------
-SET(_GRPC_LV_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gRPC LabVIEW/Libraries/${_GRPC_LV_PLATFORM_NAME}")
-install(TARGETS ${PROJECT_NAME}
+SET(_GRPC_LV_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/labview source/gRPC lv Support/Libraries/${_GRPC_LV_PLATFORM_NAME}")
+install(TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_generator
   COMPONENT ${PROJECT_NAME}
   RUNTIME DESTINATION ${_GRPC_LV_INSTALL_DIR}
   LIBRARY DESTINATION ${_GRPC_LV_INSTALL_DIR}
-)
-
-SET(_GRPC_LV_GENERATOR_INSTALL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/gRPC LabVIEW Generator/Libraries/${_GRPC_LV_PLATFORM_NAME}")
-install(TARGETS ${PROJECT_NAME}_generator
-  COMPONENT ${PROJECT_NAME}
-  RUNTIME DESTINATION ${_GRPC_LV_GENERATOR_INSTALL_DIR}
-  LIBRARY DESTINATION ${_GRPC_LV_GENERATOR_INSTALL_DIR}
 )
 
 # ----------------------------------------------------------------------
