@@ -1,10 +1,11 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <lv_interop.h>
 #include <google/protobuf/any.pb.h>
-#include <lv_message.h>
-#include <message_metadata.h>
 #include <math.h>
+
+#include "lv_interop.h"
+#include "lv_message.h"
+#include "message_metadata.h"
 
 namespace grpc_labview
 {

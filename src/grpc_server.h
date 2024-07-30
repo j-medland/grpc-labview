@@ -21,13 +21,14 @@
 #include <grpcpp/impl/codegen/server_callback.h>
 #include <grpcpp/impl/codegen/server_callback_handlers.h>
 #include <grpcpp/impl/codegen/server_context.h>
-#include <lv_interop.h>
 #include <condition_variable>
 #include <future>
 #include <map>
-#include <event_data.h>
-#include <metadata_owner.h>
-#include <semaphore.h>
+
+#include "lv_interop.h"
+#include "event_data.h"
+#include "metadata_owner.h"
+#include "semaphore.h"
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------

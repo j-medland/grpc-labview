@@ -1,7 +1,7 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <cluster_copier.h>
-#include <lv_message.h>
+#include "cluster_copier.h"
+#include "lv_message.h"
 
 namespace grpc_labview {
 

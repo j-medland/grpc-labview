@@ -3,7 +3,7 @@
 #pragma once
 
 #include <list>
-#include <exceptions.h>
+#include "exceptions.h"
 
 namespace grpc_labview
 {

@@ -5,11 +5,12 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
 #include <string>
-#include <lv_interop.h>
 #include <vector>
 #include <map>
 #include <unordered_map>
 #include <grpcpp/impl/codegen/proto_utils.h>
+
+#include "lv_interop.h"
 
 namespace grpc_labview 
 {

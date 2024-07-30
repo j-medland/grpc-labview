@@ -5,12 +5,13 @@
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <metadata_owner.h>
 #include <grpcpp/grpcpp.h>
-#include <lv_message.h>
 #include <grpcpp/impl/codegen/sync_stream.h>
 #include <future>
 #include <unordered_map>
+
+#include "metadata_owner.h"
+#include "lv_message.h"
 
 namespace grpc_labview
 {

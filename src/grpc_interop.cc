@@ -1,8 +1,5 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <grpc_server.h>
-#include <cluster_copier.h>
-#include <lv_interop.h>
 #include <iostream>
 #include <memory>
 #include <string>
@@ -10,7 +7,10 @@
 #include <mutex>
 #include <thread>
 #include <assert.h>
-#include <feature_toggles.h>
+#include "feature_toggles.h"
+#include "grpc_server.h"
+#include "cluster_copier.h"
+#include "lv_interop.h"
 
 namespace grpc_labview
 {

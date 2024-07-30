@@ -1,17 +1,18 @@
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------
-#include <grpc_client.h>
-#include <lv_interop.h>
-#include <lv_message.h>
-#include <lv_message_efficient.h>
-#include <cluster_copier.h>
 #include <grpcpp/create_channel.h>
 #include <grpcpp/impl/codegen/client_context.h>
 #include <grpcpp/impl/codegen/client_unary_call.h>
 #include <grpcpp/support/channel_arguments.h>
 #include <ctime>
 #include <chrono>
-#include <feature_toggles.h>
+
+#include "grpc_client.h"
+#include "lv_interop.h"
+#include "lv_message.h"
+#include "lv_message_efficient.h"
+#include "cluster_copier.h"
+#include "feature_toggles.h"
 
 namespace grpc_labview
 {
