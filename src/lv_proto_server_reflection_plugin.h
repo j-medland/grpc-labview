@@ -13,22 +13,16 @@
 //---------------------------------------------------------------------
 #include <string>
 #include <memory>
-#include "pointer_manager.h"
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-#ifdef _WIN32
-    #define LIBRARY_EXPORT extern "C" __declspec(dllexport)
-#else
-    #define LIBRARY_EXPORT extern "C"
-#endif
-
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-#include "lv_proto_server_reflection_service.h"
 #include <grpcpp/ext/proto_server_reflection_plugin.h>
-#include <src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h>
 #include <grpcpp/impl/server_initializer.h>
+
+// borrow this grpc-internal proto-generated include to define our custom reflection service
+#include <src/proto/grpc/reflection/v1alpha/reflection.grpc.pb.h> 
+
+#include "pointer_manager.h"
+#include "lv_proto_server_reflection_service.h"
+
 
 //---------------------------------------------------------------------
 //---------------------------------------------------------------------

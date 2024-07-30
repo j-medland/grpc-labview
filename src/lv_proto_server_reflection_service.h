@@ -21,14 +21,6 @@ using grpc::ServerInitializer;
 using grpc::reflection::v1alpha::ServerReflectionRequest;
 using grpc::reflection::v1alpha::ServerReflectionResponse;
 
-//---------------------------------------------------------------------
-//---------------------------------------------------------------------
-#ifdef _WIN32
-    #define LIBRARY_EXPORT extern "C" __declspec(dllexport)
-#else
-    #define LIBRARY_EXPORT extern "C"
-#endif
-
 namespace grpc_labview 
 {
     class LVProtoServerReflectionService final : public grpc::reflection::v1alpha::ServerReflection::Service

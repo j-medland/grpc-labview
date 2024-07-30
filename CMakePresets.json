@@ -1,0 +1,59 @@
+{
+    "version": 8,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja"
+        },
+        {
+            "name": "windows-base",
+            "inherits": "base",
+            "hidden": true,
+            "binaryDir": "${sourceDir}/build/windows-$penv{Platform}",
+            "condition": {
+                "type": "equals",
+                "lhs": "${hostSystemName}",
+                "rhs": "Windows"
+            }
+        },
+        {
+            "name": "windows-debug",
+            "hidden": false,
+            "inherits": "windows-base",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "windows-release",
+            "inherits": "windows-base",
+            "hidden": false,
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "build-base",
+            "hidden": true,
+            "targets": "install_grpc_labview"
+        },
+        {
+            "name": "windows-debug-build",
+            "inherits": "build-base",
+            "configurePreset": "windows-debug"
+        },
+        {
+            "name": "windows-release-build",
+            "inherits": "build-base",
+            "configurePreset": "windows-release"
+        }
+    ]
+}
